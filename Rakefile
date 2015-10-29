@@ -1,5 +1,6 @@
 require './app'
 require 'sinatra/activerecord/rake'
+require "resque/tasks"
 
 namespace :db do
   desc "Migrate the database"
@@ -14,7 +15,7 @@ end
 namespace :resque do
   task :setup do
     require 'resque'
-
+    Dir[File.dirname(__FILE__) + '/demux/*.rb'].each {|file| load file }
     # you probably already have this somewhere
     Resque.redis = 'localhost:6379'
   end
