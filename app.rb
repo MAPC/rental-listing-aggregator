@@ -54,6 +54,16 @@ get '/surveys/:id/listings/new' do
   Survey.find(:first, params[:id])
 end
 
+post '/surveys/:id/listings/new' do
+  Survey.find(:first, params[:id]).listings.create(params)
+end
+
+post '/surveys/new' do
+  survey = Survey.create
+  "Go to surveys/{survey.id}/listings/new"
+  # erb :form
+end
+
 # Sources
 get '/sources' do
   Source.all.to_json
