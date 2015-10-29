@@ -1,4 +1,6 @@
 source "https://rubygems.org"
+
+gem 'pg'
 gem 'sinatra'
 gem 'thin'
 gem 'activerecord-postgis-adapter'
