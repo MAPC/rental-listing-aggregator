@@ -4,6 +4,7 @@ require 'sinatra/activerecord'
 require 'json'
 require 'dotenv'
 require 'resque'
+require 'activerecord-postgis-adapter'
 
 Resque.redis = Redis.new
 
@@ -36,14 +37,6 @@ end
 ###########
 # Helpers #
 ###########
-
-# module CrawlSpawn
-#   @queue = :default
-
-#   def self.perform(klass)
-#     klass.new
-#   end
-# end
 
 class Crawl
   def initialize
