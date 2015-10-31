@@ -3,7 +3,7 @@ class CreateListingsTable < ActiveRecord::Migration
     create_table :listings do |t|
       t.st_point :location, srid: 4326
       t.integer :ask
-      t.integer :price
+      t.integer :bedrooms
       t.string :title
       t.string :address
       t.datetime :posting_date, null: true

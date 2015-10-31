@@ -55,7 +55,7 @@ class Crawl
 
   def load_demux
     # Load in crawler scripts. Loads in case the files are edited. 
-    Dir[File.dirname(__FILE__) + '/demux/*.rb'].each {|file| load file }
+    Dir[File.dirname(__FILE__) + '/mux/*.rb'].each {|file| load file }
   end
 end
 
