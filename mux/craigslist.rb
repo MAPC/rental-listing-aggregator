@@ -18,7 +18,6 @@ module Craigslist
                           ask:r["Ask"], 
                           bedrooms:r["Bedrooms"], 
                           title:r["PostingTitle"], 
-                          address:r[], 
                           posting_date: DateTime.strptime(r["PostedDate"], "%s"),
                           survey: survey) 
         end
