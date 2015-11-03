@@ -7,9 +7,9 @@ Dependencies:
 - Postgres+Postgis
 
 Getting started:
-`bundle install`
-`psql createdb craigslistscrape`
-`EXPORT SINATRA_DB=postgis://yourusername@yourhost/yourdatabase`
+ - `bundle install`
+ - `psql createdb craigslistscrape`
+ - `EXPORT SINATRA_DB=postgis://yourusername@yourhost/yourdatabase`
 
 To set up the worker process:
 `QUEUE=* rake resque:work`
