@@ -48,8 +48,7 @@ class Crawl
     # dynamically trigger crawlers from db, found in ./demux. New Sources must be entered into the database.
     sources = Source.all
     sources.each do |r|
-      klass = Object.const_get(r.script)
-      Resque.enqueue(klass)
+      Resque.enqueue(Job, r.script)
     end
   end
 
@@ -59,6 +58,14 @@ class Crawl
   end
 end
 
+module Job
+  @queue = :default
+
+  def self.perform(script)
+    klass = Object.const_get(script)
+    klass.crawl
+  end
+end
 
 ##########
 # Routes #

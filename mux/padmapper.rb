@@ -1,7 +1,5 @@
 module Padmapper
-  @queue = :default
-
-  def self.perform
+  def self.crawl
     puts "Padmapper"
   end
 end
