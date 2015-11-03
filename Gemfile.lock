@@ -45,6 +45,8 @@ GEM
       redis (~> 3.0)
       resque (~> 1.25)
       rufus-scheduler (~> 3.0)
+    resque-slack (0.1.0)
+      resque (>= 1.8)
     rgeo (0.4.0)
     rgeo-activerecord (4.0.0)
       activerecord (~> 4.2)
@@ -79,6 +81,7 @@ DEPENDENCIES
   redis
   resque
   resque-scheduler
+  resque-slack
   sinatra
   sinatra-activerecord
   thin

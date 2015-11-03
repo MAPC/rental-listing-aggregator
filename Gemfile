@@ -11,5 +11,6 @@ gem 'redis'
 
 gem 'resque'
 gem 'resque-scheduler'
+gem 'resque-slack'
 
 ruby '2.1.2'

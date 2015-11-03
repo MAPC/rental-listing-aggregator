@@ -4,9 +4,18 @@ require 'sinatra/activerecord'
 require 'json'
 require 'dotenv'
 require 'resque'
+require 'resque/failure/slack'
 require 'activerecord-postgis-adapter'
 
 Resque.redis = Redis.new
+
+Resque::Failure::Slack.configure do |config|
+  config.channel = 'CHANNEL_ID'  # required
+  config.token = ENV['SLACK_TOKEN'] || 'incorrect'   # required
+  config.level = 'minimal' # optional
+end
+
+Resque::Failure.backend = Resque::Failure::Slack
 
 Dotenv.load
 
@@ -48,7 +57,8 @@ class Crawl
     # dynamically trigger crawlers from db, found in ./demux. New Sources must be entered into the database.
     sources = Source.all
     sources.each do |r|
-      Resque.enqueue(Job, r.script)
+      klass = Object.const_get(r.script)
+      klass.crawl
     end
   end
 
@@ -61,11 +71,12 @@ end
 module Job
   @queue = :default
 
-  def self.perform(script)
-    klass = Object.const_get(script)
-    klass.crawl
+  def self.perform
+    Crawl.new
   end
 end
+
+Resque.enqueue(Job)
 
 ##########
 # Routes #
