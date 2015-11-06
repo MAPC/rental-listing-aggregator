@@ -6,16 +6,17 @@ require 'dotenv'
 require 'resque'
 require 'resque/failure/slack'
 require 'activerecord-postgis-adapter'
+require 'rgeo/geo_json'
 
 Resque.redis = Redis.new
 
-Resque::Failure::Slack.configure do |config|
-  config.channel = 'CHANNEL_ID'  # required
-  config.token = ENV['SLACK_TOKEN'] || 'incorrect'   # required
-  config.level = 'minimal' # optional
-end
+# Resque::Failure::Slack.configure do |config|
+#   config.channel = 'C03CFMGKM'  # required
+#   config.token = ENV['SLACK_TOKEN'] || 'incorrect'   # required
+#   config.level = :minimal # optional
+# end
 
-Resque::Failure.backend = Resque::Failure::Slack
+# Resque::Failure.backend = Resque::Failure::Slack
 
 Dotenv.load
 
@@ -29,6 +30,11 @@ set :database, db
 
 class Source < ActiveRecord::Base
   has_many :listings
+
+  def crawl 
+    klass = Object.const_get(self.script)
+    klass.crawl
+  end
 end
 
 class Survey < ActiveRecord::Base
@@ -42,7 +48,8 @@ class Listing < ActiveRecord::Base
   default_scope { Listing.limit(10) }
 end
 
-
+class Municipality < ActiveRecord::Base
+end
 ###########
 # Helpers #
 ###########
@@ -76,28 +83,20 @@ module Job
   end
 end
 
-Resque.enqueue(Job)
-
 ##########
 # Routes #
 ##########
 
 get '/' do
-  "This app is our continuous rental listing crawler. More information, including command line configuration, will go here."
+  "This app is our continuous rental listing crawler. More information, including command line configuration, will go here. To manually crawl, visit /jobs/new"
 end
 
-# Listings
-get '/listings' do
-  Listing.all.to_json
-end
-
-get '/listings/new' do
+get '/jobs/new' do
   erb :form
 end
 
-post '/listings/new' do
-  "You said '#{params[:message]}'"
-  erb :form
+post '/jobs/new' do
+  Resque.enqueue(Job)
 end
 
 # Surveys

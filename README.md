@@ -11,7 +11,7 @@ Dependencies:
 Getting started:
  - `bundle install`
  - `psql createdb craigslistscrape`
- - `EXPORT SINATRA_DB=postgis://yourusername@yourhost/yourdatabase`
+ - `export SINATRA_DB=postgis://yourusername@yourhost/yourdatabase`
  - `rake db:migrate`
 
 To set up the worker process:
@@ -19,3 +19,8 @@ To set up the worker process:
 
 To start up the app:
 `shotgun app.rb`
+
+Note:
+If you have an issue with dotenv/eventmachine gems, try:
+`bundle config build.eventmachine --with-cppflags=-I/usr/local/opt/openssl/include`
+

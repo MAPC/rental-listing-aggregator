@@ -8,6 +8,8 @@ gem 'sinatra-activerecord'
 gem 'json'
 gem 'dotenv'
 gem 'redis'
+gem 'rgeo-geojson'
+gem 'shotgun'
 
 gem 'resque'
 gem 'resque-scheduler'
