@@ -1,7 +1,7 @@
 ---
 every_thirty_seconds:
   every:
-    - "30s"
+    - "1M"
     - :first_in: '120s'
   queue: default
   class: Job
