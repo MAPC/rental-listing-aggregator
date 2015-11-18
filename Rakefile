@@ -1,6 +1,7 @@
 require './app'
 require 'sinatra/activerecord/rake'
 require "resque/tasks"
+require 'resque/scheduler/tasks'
 
 namespace :db do
   desc "Migrate the database"
@@ -22,7 +23,6 @@ namespace :resque do
 
   task :setup_schedule => :setup do
     require 'resque-scheduler'
-
     # If you want to be able to dynamically change the schedule,
     # uncomment this line.  A dynamic schedule can be updated via the
     # Resque::Scheduler.set_schedule (and remove_schedule) methods.
@@ -40,7 +40,7 @@ namespace :resque do
     # less code that resque-scheduler needs to know about. But in a small
     # project, it's usually easier to just include you job classes here.
     # So, something like this:
-    require 'jobs'
+    # require 'jobs'
   end
 
   task :scheduler => :setup_schedule
