@@ -18,7 +18,7 @@ namespace :resque do
     require 'resque'
     Dir[File.dirname(__FILE__) + '/mux/*.rb'].each {|file| load file }
     # you probably already have this somewhere
-    Resque.redis = 'localhost:6379'
+    Resque.redis = ENV['REDIS_URL']
   end
 
   task :setup_schedule => :setup do

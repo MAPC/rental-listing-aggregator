@@ -12,6 +12,7 @@ Getting started:
  - `bundle install`
  - `psql createdb craigslistscrape`
  - `export SINATRA_DB=postgis://yourusername@yourhost/yourdatabase`
+ - `export REDIS_URL=localhost:6379
  - `rake db:migrate`
  - `brew install redis`
 
