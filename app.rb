@@ -44,8 +44,6 @@ end
 class Listing < ActiveRecord::Base
   belongs_to :source
   belongs_to :survey
-
-  default_scope { Listing.limit(10) }
 end
 
 class Municipality < ActiveRecord::Base

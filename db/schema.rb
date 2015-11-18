@@ -11,25 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151028201721) do
+ActiveRecord::Schema.define(version: 20151112204647) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "hstore"
   enable_extension "postgis"
-
-  create_table "listing", force: :cascade do |t|
-    t.integer  "ask",                                            null: false
-    t.integer  "bedrooms",                                       null: false
-    t.geometry "location", limit: {:srid=>4326, :type=>"point"}, null: false
-    t.string   "title",    limit: 255,                           null: false
-    t.datetime "date",                                           null: false
-  end
 
   create_table "listings", force: :cascade do |t|
     t.geometry "location",     limit: {:srid=>4326, :type=>"point"}
     t.integer  "ask"
-    t.integer  "price"
+    t.integer  "bedrooms"
     t.string   "title"
     t.string   "address"
     t.datetime "posting_date"
@@ -37,10 +28,23 @@ ActiveRecord::Schema.define(version: 20151028201721) do
     t.datetime "updated_at"
     t.integer  "source_id"
     t.integer  "survey_id"
+    t.json     "payload"
   end
 
   add_index "listings", ["source_id"], name: "index_listings_on_source_id", using: :btree
   add_index "listings", ["survey_id"], name: "index_listings_on_survey_id", using: :btree
+
+  create_table "municipalities", force: :cascade do |t|
+    t.geometry "geom",                               limit: {:srid=>4326, :type=>"multi_polygon"}
+    t.string   "geoid"
+    t.string   "name"
+    t.float    "B25003001 - Total:"
+    t.float    "B25003001 - Total:, Error"
+    t.float    "B25003002 - Owner occupied"
+    t.float    "B25003002 - Owner occupied, Error"
+    t.float    "B25003003 - Renter occupied"
+    t.float    "B25003003 - Renter occupied, Error"
+  end
 
   create_table "sources", force: :cascade do |t|
     t.string   "title"

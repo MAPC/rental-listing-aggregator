@@ -13,6 +13,7 @@ Getting started:
  - `psql createdb craigslistscrape`
  - `export SINATRA_DB=postgis://yourusername@yourhost/yourdatabase`
  - `rake db:migrate`
+ - `brew install redis`
 
 To set up the worker process:
 `QUEUE=* rake resque:work`
