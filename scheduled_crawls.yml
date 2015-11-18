@@ -1,8 +1,8 @@
 ---
 every_thirty_seconds:
   every:
-    - "1M"
-    - :first_in: '2s'
+    - "30s"
+    - :first_in: '120s'
   queue: default
   class: Job
-  description: "This will run the crawler every month."
+  description: "This job will check Daemon every 30 seconds after 120 seconds after start"
