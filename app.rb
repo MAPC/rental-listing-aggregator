@@ -119,7 +119,7 @@ get '/sources' do
   Source.all.to_json
 end
 
-get 'resque_admin' do
+get '/resque_admin' do
   mount ResqueWeb::Engine => "/resque_web"
 end
 
