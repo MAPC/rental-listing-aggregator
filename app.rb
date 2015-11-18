@@ -4,6 +4,7 @@ require 'sinatra/activerecord'
 require 'json'
 require 'dotenv'
 require 'resque'
+require 'resque/server'
 require 'resque/failure/slack'
 require 'activerecord-postgis-adapter'
 require 'rgeo/geo_json'
@@ -120,6 +121,6 @@ get '/sources' do
 end
 
 get '/resque_admin' do
-  mount ResqueWeb::Engine => "/resque_web"
+  mount Resque::Server.new, :at => "/resque"
 end
 
