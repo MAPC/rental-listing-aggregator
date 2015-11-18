@@ -45,7 +45,6 @@ module Craigslist # < AbstractCrawlJob
     l = Listing.new location: location,
                 ask: r.fetch("Ask") { :default } ,
                 bedrooms: r["Bedrooms"],
-                address: r.fetch("location"),
                 title: r["PostingTitle"],
                 posting_date: date,
                 survey: survey,
