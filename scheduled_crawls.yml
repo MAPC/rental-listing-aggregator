@@ -1,6 +1,8 @@
 ---
 every_thirty_seconds:
-  cron: 40 15 * * 3
+  every:
+    - "30s"
+    - :first_in: '120s'
   queue: default
   class: Job
   description: "This job will check Daemon every 30 seconds after 120 seconds after start"
