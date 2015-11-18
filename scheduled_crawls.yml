@@ -1,6 +1,6 @@
 ---
 Job:
-  cron: "* * * * *"
+  cron: "55 21 * * *"
   queue: default
   class: Job
   description: "This job will check Daemon every 30 seconds after 120 seconds after start"
