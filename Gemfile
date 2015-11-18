@@ -12,7 +12,6 @@ gem 'rgeo-geojson'
 gem 'shotgun'
 
 gem 'resque'
-gem 'resque-web', require: 'resque_web'
 gem 'resque-scheduler'
 gem 'resque-slack'
 

@@ -32,10 +32,10 @@
   <mapcanvas>
     <units>degrees</units>
     <extent>
-      <xmin>-71.14181157507844944</xmin>
-      <ymin>42.30984232782162735</ymin>
-      <xmax>-71.0687465693690541</xmax>
-      <ymax>42.35165630861712316</ymax>
+      <xmin>-71.14988430042835432</xmin>
+      <ymin>42.32024109267914724</ymin>
+      <xmax>-71.07681929471895899</xmax>
+      <ymax>42.36205507347464305</ymax>
     </extent>
     <rotation>0</rotation>
     <projections>1</projections>
@@ -1233,10 +1233,10 @@
         <multilineenabled fieldname="" on=""/>
         <selectedonly on=""/>
       </labelattributes>
-      <editform></editform>
+      <editform>.</editform>
       <editforminit/>
       <featformsuppress>0</featformsuppress>
-      <annotationform></annotationform>
+      <annotationform>.</annotationform>
       <editorlayout>generatedlayout</editorlayout>
       <excludeAttributesWMS/>
       <excludeAttributesWFS/>
@@ -1410,10 +1410,10 @@
         <multilineenabled fieldname="" on=""/>
         <selectedonly on=""/>
       </labelattributes>
-      <editform></editform>
+      <editform>.</editform>
       <editforminit/>
       <featformsuppress>0</featformsuppress>
-      <annotationform></annotationform>
+      <annotationform>.</annotationform>
       <editorlayout>generatedlayout</editorlayout>
       <excludeAttributesWMS/>
       <excludeAttributesWFS/>
