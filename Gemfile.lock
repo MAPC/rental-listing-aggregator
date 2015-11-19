@@ -86,6 +86,7 @@ DEPENDENCIES
   resque
   resque-scheduler
   resque-slack
+  rgeo
   rgeo-geojson
   shotgun
   sinatra
