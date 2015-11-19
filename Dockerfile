@@ -28,4 +28,4 @@ COPY . /usr/src/app
 
 EXPOSE 5000
 RUN find / -name foreman
-RUN bundle exec foreman start -m image_worker=2
+CMD ["bundle", "exec", "foreman", "start", "-m", "image_worker=2"]
