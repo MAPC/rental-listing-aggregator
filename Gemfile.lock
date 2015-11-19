@@ -28,6 +28,11 @@ GEM
     mono_logger (1.1.0)
     multi_json (1.11.2)
     pg (0.18.3)
+    pg_array_parser (0.0.9)
+    postgres_ext (2.4.1)
+      activerecord (>= 4.0.0)
+      arel (>= 4.0.1)
+      pg_array_parser (~> 0.0.9)
     rack (1.6.4)
     rack-protection (1.5.3)
       rack
@@ -50,8 +55,6 @@ GEM
     rgeo (0.4.0)
     rgeo-activerecord (4.0.0)
       activerecord (~> 4.2)
-      rgeo (~> 0.3)
-    rgeo-geojson (0.3.1)
       rgeo (~> 0.3)
     rufus-scheduler (3.1.7)
     shotgun (0.9.1)
@@ -82,12 +85,11 @@ DEPENDENCIES
   dotenv
   json
   pg
+  postgres_ext
   redis
   resque
   resque-scheduler
   resque-slack
-  rgeo
-  rgeo-geojson
   shotgun
   sinatra
   sinatra-activerecord
