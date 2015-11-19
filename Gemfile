@@ -15,5 +15,6 @@ gem 'shotgun'
 gem 'resque'
 gem 'resque-scheduler'
 gem 'resque-slack'
+gem 'foreman'
 
 ruby '2.1.2'

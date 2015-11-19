@@ -16,7 +16,8 @@ RUN sudo apt-get install -y --force-yes libgeos++-dev
 RUN gem update --system
 RUN gem install bundler
 
-RUN git clone https://github.com/tcnksm/docker-sinatra /root/sinatra
-RUN cd /root/sinatra; bundle install
+RUN bundle install
 
-EXPOSE 4567
+EXPOSE 5000
+RUN find / -name foreman
+CMD ["bundle", "exec", "foreman", "start"]
