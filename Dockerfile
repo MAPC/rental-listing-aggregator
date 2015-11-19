@@ -13,11 +13,17 @@ RUN cd /root/src/ruby-2.2.2; ./configure; make install
 RUN sudo apt-get install -y --force-yes libgeos-dev
 RUN sudo apt-get install -y --force-yes libgeos++-dev
 
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+COPY Gemfile /usr/src/app/
+COPY Gemfile.lock /usr/src/app/
+
 RUN gem update --system
 RUN gem install bundler
 
-COPY . /usr/src/app
 RUN bundle install
+COPY . /usr/src/app
 
 EXPOSE 5000
 RUN find / -name foreman
