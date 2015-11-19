@@ -8,6 +8,7 @@ gem 'sinatra-activerecord'
 gem 'json'
 gem 'dotenv'
 gem 'redis'
+gem 'rgeo'
 gem 'rgeo-geojson'
 gem 'shotgun'
 
