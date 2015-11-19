@@ -1,2 +1,2 @@
 https://github.com/heroku/heroku-buildpack-ruby
-https://github.com/cyberdelia/heroku-geo-buildpack
+https://github.com/jcamenisch/heroku-buildpack-rgeo
