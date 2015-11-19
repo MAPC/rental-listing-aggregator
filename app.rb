@@ -7,7 +7,7 @@ require 'resque'
 require 'resque/server'
 require 'resque/failure/slack'
 require 'activerecord-postgis-adapter'
-require 'rgeo/geo_json'
+# require 'rgeo/geo_json'
 
 Resque.redis = Redis.new
 
