@@ -16,6 +16,7 @@ RUN sudo apt-get install -y --force-yes libgeos++-dev
 RUN gem update --system
 RUN gem install bundler
 
+COPY . /usr/src/app
 RUN bundle install
 
 EXPOSE 5000
