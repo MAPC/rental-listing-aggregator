@@ -10,14 +10,14 @@ require 'activerecord-postgis-adapter'
 require 'rgeo/geo_json'
 
 Resque.redis = Redis.new
-Resque::Server.new
-# Resque::Failure::Slack.configure do |config|
-#   config.channel = 'C03CFMGKM'  # required
-#   config.token = ENV['SLACK_TOKEN'] || 'incorrect'   # required
-#   config.level = :minimal # optional
-# end
 
-# Resque::Failure.backend = Resque::Failure::Slack
+Resque::Failure::Slack.configure do |config|
+  config.channel = 'C03CFMGKM'  # required
+  config.token = ENV['SLACK_TOKEN'] || 'incorrect'   # required
+  config.level = :minimal # optional
+end
+
+Resque::Failure.backend = Resque::Failure::Slack
 
 Dotenv.load
 

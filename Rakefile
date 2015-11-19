@@ -1,7 +1,6 @@
 require './app'
 require 'sinatra/activerecord/rake'
 require "resque/tasks"
-require 'resque/scheduler/tasks'
 
 namespace :db do
   desc "Migrate the database"
@@ -18,11 +17,12 @@ namespace :resque do
     require 'resque'
     Dir[File.dirname(__FILE__) + '/mux/*.rb'].each {|file| load file }
     # you probably already have this somewhere
-    Resque.redis = ENV['REDIS_URL']
+    Resque.redis = 'http://localhost:6379'
   end
 
   task :setup_schedule => :setup do
     require 'resque-scheduler'
+
     # If you want to be able to dynamically change the schedule,
     # uncomment this line.  A dynamic schedule can be updated via the
     # Resque::Scheduler.set_schedule (and remove_schedule) methods.
