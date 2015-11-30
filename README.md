@@ -1,6 +1,4 @@
-# RentalGhost
-
-![Ghost Emoji Picture](https://github.com/MAPC/rental-listing-aggregator/blob/master/ghost.png?raw=true)
+# Rentscape
 
 RentGhost is an open rental listing aggregator that schedules sampling crawls across multiple rental posting services. Eventually, the project intends to implement machine learning. 
 
