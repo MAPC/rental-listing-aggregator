@@ -36,7 +36,7 @@ module Padmapper
 
   def self.recursive_subdivide(bboxs)
     bboxs.each do |r|
-      sleep(3)
+      sleep(2)
       uri = URI( query_string ( get_coords (r) )) 
       res = Net::HTTP.get_response(uri)
 
@@ -96,10 +96,10 @@ module Padmapper
   end
 
   def self.listings_query_string
-    "http://www.padmapper.com/pullListingsForCache.php"
+    "https://www.padmapper.com/pullListingsForCache.php"
   end
 
   def self.query_string(coords)
-    "http://www.padmapper.com/reloadMarkersJSON.php?eastLong=#{coords[:max_x]}&northLat=#{coords[:max_y]}&westLong=#{coords[:min_x]}&southLat=#{coords[:min_y]}&cities=false&limit=3150&minRent=0&maxRent=6000&searchTerms=Words+Required+In+Listing&maxPricePerBedroom=6000&minBR=0&maxBR=10&minBA=1&maxAge=7&imagesOnly=false&phoneReq=false&cats=false&dogs=false&noFee=false&showSubs=true&showNonSubs=true&showRooms=true&showVac=false&userId=-1&pl=true&aptsrch=true&forrent=true&hmst=true&kijiji=true&airbnb=false&ood=true&zoom=12&favsOnly=false&onlyHQ=true&showHidden=false&am=false&workplaceLat=0&workplaceLong=0&maxTime=0"
+    "https://www.padmapper.com/reloadMarkersJSON.php?eastLong=#{coords[:max_x]}&northLat=#{coords[:max_y]}&westLong=#{coords[:min_x]}&southLat=#{coords[:min_y]}&cities=false&limit=3150&minRent=0&maxRent=6000&searchTerms=Words+Required+In+Listing&maxPricePerBedroom=6000&minBR=0&maxBR=10&minBA=1&maxAge=7&imagesOnly=false&phoneReq=false&cats=false&dogs=false&noFee=false&showSubs=true&showNonSubs=true&showRooms=true&showVac=false&userId=-1&pl=true&aptsrch=true&forrent=true&hmst=true&kijiji=true&airbnb=false&ood=true&zoom=12&favsOnly=false&onlyHQ=true&showHidden=false&am=false&workplaceLat=0&workplaceLong=0&maxTime=0"
   end
 end
