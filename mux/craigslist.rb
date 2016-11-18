@@ -2,17 +2,17 @@ module Craigslist # < AbstractCrawlJob
   @source = Source.find(1)
 
   def self.crawl
-    # uri = URI("http://boston.craigslist.org/jsonsearch/aap/")
-    # res = Net::HTTP.get_response(uri)
+    uri = URI("http://boston.craigslist.org/jsonsearch/aap/")
+    res = Net::HTTP.get_response(uri)
 
-    # results = JSON.parse( assert_successful_response (res) ).first
-    # survey  = Survey.create
-    # # Iterating
+    results = JSON.parse( assert_successful_response (res) ).first
+    survey  = Survey.create
+    # Iterating
 
-    # results.each do |r|
-    #   create_listing_from_result(r, survey) if !r.has_key?("GeoCluster")
-    #   fetch_nested(r.fetch("url"), survey) if r.has_key?("GeoCluster")
-    # end
+    results.each do |r|
+      create_listing_from_result(r, survey) if !r.has_key?("GeoCluster")
+      fetch_nested(r.fetch("url"), survey) if r.has_key?("GeoCluster")
+    end
   end
 
   def self.fetch_nested(geocluster, survey)
@@ -48,7 +48,8 @@ module Craigslist # < AbstractCrawlJob
                 title: r["PostingTitle"],
                 posting_date: date,
                 survey: survey,
-                source: @source
+                source: @source,
+                payload: r.to_json
 
     if l.save
       # success message

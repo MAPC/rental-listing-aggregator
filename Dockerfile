@@ -28,4 +28,5 @@ COPY . /usr/src/app
 
 EXPOSE 5000
 RUN find / -name foreman
-CMD ["bundle", "exec", "foreman", "start"]
+RUN touch /var/log/cron.log
+CMD cron && tail -f /var/log/cron.log

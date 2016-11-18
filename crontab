@@ -1,0 +1,1 @@
+1 4 * * 3 root . ./crawl.sh

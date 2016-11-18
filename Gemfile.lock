@@ -20,6 +20,7 @@ GEM
     arel (6.0.3)
     builder (3.2.2)
     daemons (1.2.3)
+    diff-lcs (1.2.5)
     dotenv (2.0.2)
     eventmachine (1.0.8)
     foreman (0.78.0)
@@ -58,6 +59,19 @@ GEM
     rgeo-activerecord (4.0.0)
       activerecord (~> 4.2)
       rgeo (~> 0.3)
+    rspec (3.5.0)
+      rspec-core (~> 3.5.0)
+      rspec-expectations (~> 3.5.0)
+      rspec-mocks (~> 3.5.0)
+    rspec-core (3.5.4)
+      rspec-support (~> 3.5.0)
+    rspec-expectations (3.5.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.5.0)
+    rspec-mocks (3.5.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.5.0)
+    rspec-support (3.5.0)
     rufus-scheduler (3.1.7)
     shotgun (0.9.1)
       rack (>= 1.0)
@@ -94,6 +108,7 @@ DEPENDENCIES
   resque
   resque-scheduler
   resque-slack
+  rspec
   shotgun
   sinatra
   sinatra-activerecord

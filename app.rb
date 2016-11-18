@@ -21,7 +21,7 @@ Resque::Failure.backend = Resque::Failure::Slack
 
 Dotenv.load
 
-db = ENV['SINATRA_DB'] || 'postgis://Matt@localhost/craigslistscrape'
+db = ENV['SINATRA_DB'] || 'postgis://mgardner@localhost/craigslistscrape'
 set :database, db
 
 

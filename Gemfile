@@ -16,5 +16,5 @@ gem 'resque'
 gem 'resque-scheduler'
 gem 'resque-slack'
 gem 'foreman'
-
+gem "rspec"
 ruby '2.1.2'

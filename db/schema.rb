@@ -34,18 +34,6 @@ ActiveRecord::Schema.define(version: 20151112204647) do
   add_index "listings", ["source_id"], name: "index_listings_on_source_id", using: :btree
   add_index "listings", ["survey_id"], name: "index_listings_on_survey_id", using: :btree
 
-  create_table "municipalities", force: :cascade do |t|
-    t.geometry "geom",                               limit: {:srid=>4326, :type=>"multi_polygon"}
-    t.string   "geoid"
-    t.string   "name"
-    t.float    "B25003001 - Total:"
-    t.float    "B25003001 - Total:, Error"
-    t.float    "B25003002 - Owner occupied"
-    t.float    "B25003002 - Owner occupied, Error"
-    t.float    "B25003003 - Renter occupied"
-    t.float    "B25003003 - Renter occupied, Error"
-  end
-
   create_table "sources", force: :cascade do |t|
     t.string   "title"
     t.string   "website"
