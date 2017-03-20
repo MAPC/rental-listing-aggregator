@@ -1,0 +1,18 @@
+version: '2'
+services:
+  ruby:
+    build: .
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - db
+    ports:
+      - 8080:80
+    command: dockerize -wait tcp://db:5432 ./crawl.sh
+  db:
+      image: mdillon/postgis:9.6-alpine
+      volumes:
+        - ./db:/docker-entrypoint-initdb.d
+      environment:
+        POSTGRES_DB: 'craigslistscrape'
+        POSTGRES_USER: 'root'
