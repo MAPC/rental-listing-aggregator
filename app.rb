@@ -1,23 +1,7 @@
-require 'rubygems'
 require 'sinatra'
 require 'sinatra/activerecord'
 require 'json'
-require 'dotenv'
-require 'resque'
-require 'resque/server'
-require 'resque/failure/slack'
 require 'activerecord-postgis-adapter'
-# require 'rgeo/geo_json'
-
-Resque.redis = Redis.new
-
-# Resque::Failure::Slack.configure do |config|
-#   config.channel = 'C03CFMGKM'  # required
-#   config.token = ENV['SLACK_TOKEN'] || 'incorrect'   # required
-#   config.level = :minimal # optional
-# end
-
-# Resque::Failure.backend = Resque::Failure::Slack
 
 ##########
 # Models #

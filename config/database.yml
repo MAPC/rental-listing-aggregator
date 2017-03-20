@@ -7,7 +7,7 @@ default: &default
 
 development:
   <<: *default
-  database: craigslistscrape
+  database: rent_aggregator_db
   username: root
   host: db
 

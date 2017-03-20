@@ -10,15 +10,16 @@ services:
       - 8080:80
     command: ""
     environment:
-      SINATRA_DB: 'postgis://db/craigslistscrape'
       CRAIGSLIST_URL: 'https://raleigh.craigslist.org'
       MAX_RESULTS: 1
   db:
     image: mdillon/postgis:9.6-alpine
     volumes:
-      - ./db_dumps:/docker-entrypoint-initdb.d
+      - ./db_import:/docker-entrypoint-initdb.d
+    # To persist the postgres database to the host machine storage, enable this volume mapping.
+    #  - ./postgres_data:/var/lib/postgresql/data
     environment:
-      POSTGRES_DB: 'craigslistscrape'
+      POSTGRES_DB: 'rent_aggregator_db'
       POSTGRES_USER: 'root'
     ports:
       - 5432:5432

@@ -16,7 +16,8 @@
 !/log/.keep
 /tmp
 
-# Ignore database dumps
-/db_dumps
+# Ignore database dumps and imports
+/db_dumps/*
+/db_import/*
 
 .DS_Store
