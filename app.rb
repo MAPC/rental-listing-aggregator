@@ -11,17 +11,17 @@ require 'activerecord-postgis-adapter'
 
 Resque.redis = Redis.new
 
-Resque::Failure::Slack.configure do |config|
-  config.channel = 'C03CFMGKM'  # required
-  config.token = ENV['SLACK_TOKEN'] || 'incorrect'   # required
-  config.level = :minimal # optional
-end
+# Resque::Failure::Slack.configure do |config|
+#   config.channel = 'C03CFMGKM'  # required
+#   config.token = ENV['SLACK_TOKEN'] || 'incorrect'   # required
+#   config.level = :minimal # optional
+# end
 
-Resque::Failure.backend = Resque::Failure::Slack
+# Resque::Failure.backend = Resque::Failure::Slack
 
 Dotenv.load
 
-db = ENV['SINATRA_DB'] || 'postgis://mgardner@localhost/craigslistscrape'
+db = ENV['SINATRA_DB'] || 'postgis://db/craigslistscrape'
 set :database, db
 
 
@@ -80,42 +80,4 @@ module Job
   def self.perform
     Crawl.new
   end
-end
-
-##########
-# Routes #
-##########
-
-get '/' do
-  "This app is our continuous rental listing crawler. More information, including command line configuration, will go here. To manually crawl, visit /jobs/new"
-end
-
-get '/jobs/new' do
-  erb :form
-end
-
-post '/jobs/new' do
-  Resque.enqueue(Job)
-end
-
-# Surveys
-get '/surveys.json' do
-  Survey.all.to_json
-end
-
-get '/surveys/:id/listings/new' do
-  Survey.find(:first, params[:id])
-end
-
-post '/surveys/:id/listings/new' do
-  Survey.find(:first, params[:id]).listings.create(params)
-end
-
-post '/surveys/new' do
-  survey = Survey.create
-  "Go to surveys/{survey.id}/listings/new"
-end
-
-get '/sources' do
-  Source.all.to_json
 end

@@ -1,8 +1,8 @@
 module Craigslist # < AbstractCrawlJob
   @source = Source.find(1)
-
+  @base_url = ENV['CRAIGSLIST_URL'] || "http://boston.craigslist.org"
   def self.crawl
-    uri = URI("http://boston.craigslist.org/jsonsearch/aap/")
+    uri = URI(self.base_url + "/jsonsearch/aap/")
     res = Net::HTTP.get_response(uri)
 
     results = JSON.parse( assert_successful_response (res) ).first
@@ -17,7 +17,7 @@ module Craigslist # < AbstractCrawlJob
 
   def self.fetch_nested(geocluster, survey)
     sleep(5)
-    geocluster_url = "http://boston.craigslist.org" + geocluster
+    geocluster_url = self.base_url + geocluster
     uri = URI(geocluster_url)
     res = Net::HTTP.get_response(uri)
     results = JSON.parse( assert_successful_response (res) ).first

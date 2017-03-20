@@ -7,7 +7,6 @@ module Padmapper
   @@zumpertoken = nil
   @@tokens = nil
 
-
   def self.crawl
     get_tokens
 
