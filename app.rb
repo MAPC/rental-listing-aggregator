@@ -57,6 +57,7 @@ class Crawl
     # dynamically trigger crawlers from db, found in ./demux. New Sources must be entered into the database.
     sources = Source.all
     sources.each do |r|
+      print "***SCRAPING " + r.title + "***\n"
       klass = Object.const_get(r.script)
       klass.crawl
     end

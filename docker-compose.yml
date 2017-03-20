@@ -12,6 +12,7 @@ services:
     environment:
       SINATRA_DB: 'postgis://db/craigslistscrape'
       CRAIGSLIST_URL: 'https://raleigh.craigslist.org'
+      MAX_RESULTS: 1
   db:
     image: mdillon/postgis:9.6-alpine
     volumes:

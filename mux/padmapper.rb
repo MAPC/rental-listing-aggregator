@@ -16,7 +16,6 @@ module Padmapper
     # geoms = [Municipality.find(180).geom]
     # bboxs = munis.map {|x| create_bbox(x)}
     bboxs = create_bbox(region)
-
     recursive_subdivide([bboxs])
   end
 
@@ -42,7 +41,6 @@ module Padmapper
     request["cache-control"] = 'no-cache'
 
     response = JSON.parse(http.request(request).read_body)
-
     @@csrftoken = response["csrf"]
     @@zumpertoken = response["xz_token"]
 
