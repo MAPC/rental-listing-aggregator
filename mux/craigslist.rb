@@ -1,10 +1,9 @@
 module Craigslist # < AbstractCrawlJob
-  @source = Source.find(1)
-  @base_url = ENV['CRAIGSLIST_URL'] || "http://boston.craigslist.org"
+  @source = Source.find_by title: 'Craigslist'
+  @base_url = ENV['CRAIGSLIST_URL']
   def self.crawl
-    uri = URI(self.base_url + "/jsonsearch/aap/")
+    uri = URI(@base_url + "/jsonsearch/apa/")
     res = Net::HTTP.get_response(uri)
-
     results = JSON.parse( assert_successful_response (res) ).first
     survey  = Survey.create
     # Iterating
@@ -17,7 +16,7 @@ module Craigslist # < AbstractCrawlJob
 
   def self.fetch_nested(geocluster, survey)
     sleep(5)
-    geocluster_url = self.base_url + geocluster
+    geocluster_url = @base_url + geocluster
     uri = URI(geocluster_url)
     res = Net::HTTP.get_response(uri)
     results = JSON.parse( assert_successful_response (res) ).first
@@ -38,8 +37,9 @@ module Craigslist # < AbstractCrawlJob
 
   def self.create_listing_from_result(result, survey)
     r = result
+    p r
     location = factory.point r["Longitude"], r["Latitude"]
-    date = DateTime.strptime r["PostedDate"], "%s"
+    date = DateTime.strptime r["PostedDate"].to_s, "%s"
 
     # Creating a listing
     l = Listing.new location: location,

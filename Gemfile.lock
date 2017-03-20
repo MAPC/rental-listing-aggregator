@@ -39,6 +39,7 @@ GEM
     rack (1.6.4)
     rack-protection (1.5.3)
       rack
+    rake (12.0.0)
     redis (3.2.1)
     redis-namespace (1.5.2)
       redis (~> 3.0, >= 3.0.4)
@@ -104,6 +105,7 @@ DEPENDENCIES
   json
   pg
   postgres_ext
+  rake
   redis
   resque
   resque-scheduler
@@ -113,3 +115,6 @@ DEPENDENCIES
   sinatra
   sinatra-activerecord
   thin
+
+BUNDLED WITH
+   1.14.6

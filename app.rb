@@ -19,12 +19,6 @@ Resque.redis = Redis.new
 
 # Resque::Failure.backend = Resque::Failure::Slack
 
-Dotenv.load
-
-db = ENV['SINATRA_DB'] || 'postgis://db/craigslistscrape'
-set :database, db
-
-
 ##########
 # Models #
 ##########

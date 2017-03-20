@@ -19,4 +19,4 @@ EXPOSE 5000
 # RUN find / -name foreman
 RUN touch /var/log/cron.log
 
-CMD ./crawl.sh
+ENTRYPOINT ["dockerize", "-wait", "tcp://db:5432"]

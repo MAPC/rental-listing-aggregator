@@ -2,7 +2,7 @@ module Padmapper
   @@stash = []
   @@stacks = 0
   @@current_survey = Survey.create
-  @@source = Source.find(2)
+  @@source = Source.find_by title: 'Padmapper'
   @@csrftoken = nil
   @@zumpertoken = nil
   @@tokens = nil
