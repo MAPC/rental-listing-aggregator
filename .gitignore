@@ -19,5 +19,10 @@
 # Ignore database dumps and imports
 /db_dumps/*
 /db_import/*
+/geojson/*
 
 .DS_Store
+
+# Ignore production config
+docker-compose.production.yml
+config/database.yml

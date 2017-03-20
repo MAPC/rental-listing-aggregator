@@ -10,14 +10,21 @@ services:
     environment:
       CRAIGSLIST_URL: 'https://raleigh.craigslist.org'
       #MAX_RESULTS: 1
+      RACK_ENV: 'production'
   db:
     image: mdillon/postgis:9.6-alpine
     volumes:
-      - ./db_import:/docker-entrypoint-initdb.d
     # To persist the postgres database to the host machine storage, enable this volume mapping.
     #  - ./postgres_data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: 'rent_aggregator_db'
       POSTGRES_USER: 'root'
-    ports:
-      - 5432:5432
+      POSTGRES_PASSWORD: 'secret'
+
+#   Uncomment this section for logging
+#  log:
+#    image: gliderlabs/logspout
+#    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock
+#    container_name: logspout
+#    command: "syslog+tls://logs.papertrailapp.com:1111"
