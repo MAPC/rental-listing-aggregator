@@ -26,8 +26,6 @@ class Listing < ActiveRecord::Base
   validates :location, :title, :uid, presence: true
 end
 
-class Municipality < ActiveRecord::Base
-end
 ###########
 # Helpers #
 ###########
