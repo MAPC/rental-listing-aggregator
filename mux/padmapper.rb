@@ -1,7 +1,7 @@
 module Padmapper
   @@stash = []
   @@stacks = 0
-  @@current_survey
+  @@current_survey = Survey.create
   @@source = Source.find(2)
   @@csrftoken = nil
   @@zumpertoken = nil
@@ -9,47 +9,28 @@ module Padmapper
 
 
   def self.crawl
-    # munis = Municipality.pluck(:geom)
-    # region = munis.inject &:union
-    # geoms = [region]
-    # # geoms = [Municipality.find(180).geom]
-    # bboxs = geoms.map { |x| create_bbox(x) }
-    
-    # # source = Source.find(2)
-    # @@current_survey = Survey.create
-    # recursive_subdivide(bboxs)
-    # crawl_stash
     get_tokens
-    crawl_stash
 
+    munis = Municipality.pluck(:geom)
+    region = munis.inject &:union
+    # geoms = munis
+    # geoms = [Municipality.find(180).geom]
+    # bboxs = munis.map {|x| create_bbox(x)}
+    bboxs = create_bbox(region)
+
+    recursive_subdivide([bboxs])
   end
 
-  def self.filters
-    {bedrooms:nil,
-      buildingIds:nil,
-      cats:nil,
-      dogs:nil,
-      featuredLimit:3,
-      keywords:nil,
-      limit:20,
-      listingIds:nil,
-      matching:true,
-      maxDays:nil,
-      maxPrice:nil,
-      maxPricePerBedroom:nil,
-      maxLat:42.41002,
-      minLat:42.16086,
-      maxLng:-70.95639,
-      minLng:-71.39481,
-      minPrice:nil,
-      noFees:nil,
-      offset:0,
-      sort:nil,
-      url:nil,
-      minBathrooms:nil,
-      feeds:["-airbnb"]}
+  def self.filters(bbox)
+    {
+      limit:100,
+      maxLat: bbox.max_y,
+      minLat: bbox.min_y,
+      maxLng: bbox.max_x,
+      minLng: bbox.min_x,
+      feeds:["-airbnb"]
+    }
   end
-
 
   def self.get_tokens
     url = URI("https://www.padmapper.com/api/t/1/bundle")
@@ -65,19 +46,20 @@ module Padmapper
 
     @@csrftoken = response["csrf"]
     @@zumpertoken = response["xz_token"]
-    @@tokens = { 'x-csrftoken' => @@csrftoken, 'x-zumper-xz-token' => @@zumpertoken }
+
+    { 'x-csrftoken' => @@csrftoken, 'x-zumper-xz-token' => @@zumpertoken }
   end
 
-  def self.crawl_stash
-    unique = @@stash.uniq
-    unique.each_slice(50) { |r|  
-      crawl_slice(r)
-    }
-  end
+  # def self.crawl_stash
+  #   unique = @@stash.uniq
+  #   unique.each_slice(50) { |r|  
+  #     crawl_slice(r)
+  #   }
+  # end
 
-  def self.crawl_slice(slice)
+  def self.crawl_slice(filters)
     sleep(3)
-    url = URI("https://www.padmapper.com/api/t/1/pages/listables")
+    url = URI("https://www.padmapper.com/api/t/1/pins")
 
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
@@ -89,14 +71,9 @@ module Padmapper
     request["x-zumper-xz-token"] = @@zumpertoken
     request["content-type"] = 'application/json'
     request["cache-control"] = 'no-cache'
-    request.body = hash.to_json
+    request.body = filters.to_json
 
-    response = http.request(request)
-    puts response.read_body
-
-    JSON.parse(res.body).each do |r|
-      create_listing_from_result(r)
-    end
+    http.request(request).body
   end
 
   def self.bundle 
@@ -110,67 +87,69 @@ module Padmapper
 
   # old
 
-  # def self.assert_batch_has_unique(array)
-  #   ids = array.map { |x| x["id"] }
-  #   ids.any? { |id| !@@stash.include? id }
-  # end
+  def self.assert_batch_has_unique(array)
+    ids = array.map { |x| x["listing_id"] }
+    ids.any? { |id| !@@stash.include? id }
+  end
 
-  # def self.recursive_subdivide(bboxs)
-  #   bboxs.each do |r|
-  #     sleep(2)
-  #     uri = URI( query_string ( get_coords (r) )) 
-  #     res = Net::HTTP.get_response(uri)
+  def self.recursive_subdivide(bboxs)
+    bboxs.each do |r|
+      sleep(2)
+      puts "iterating"
 
-  #     results = JSON.parse( assert_successful_response (res) )
-  #     if assert_batch_has_unique(results) && results.count > 0
-  #       @@stacks+=1
-  #       @@stash.concat results.map { |x| x["id"] }
-  #       recursive_subdivide(r.subdivide)
-  #     end
-  #   end
-  # end
+      results = JSON.parse( crawl_slice( filters( r ) ) )
+      if assert_batch_has_unique(results) && results.count > 0
+        @@stacks+=1
+        @@stash.concat results.map { |x| x["listing_id"] }
+        results.each do |r|
+          create_listing_from_result(r)
+        end
+        recursive_subdivide(r.subdivide)
+      end
+    end
+  end
 
-  # def self.create_listing_from_result(result)
-  #   r = result
-  #   location = factory.point r["lng"], r["lat"]
-  #   date = DateTime.strptime r["date"].to_s, "%s"
+  def self.create_listing_from_result(result)
+    r = result
+    location = factory.point r["lng"], r["lat"]
+    date = DateTime.strptime r["listed_on"].to_s, "%s"
+    price = (r["min_price"] + r["max_price"]) / 2  #average price
+    # Creating a listing
+    l = Listing.new location: location,
+                ask: price,
+                bedrooms: r["max_bedrooms"],
+                title: r["address"],
+                posting_date: date,
+                survey: @@current_survey,
+                source: @@source,
+                payload: r.to_json
 
-  #   # Creating a listing
-  #   l = Listing.new location: location,
-  #               ask: r.fetch("price") { :default } ,
-  #               bedrooms: r["beds"],
-  #               title: r["description"],
-  #               posting_date: date,
-  #               survey: @@current_survey,
-  #               source: @@source,
-  #               payload: r.to_json
+    if l.save
+      # success message
+    else
+      # error message
+    end
+  end
 
-  #   if l.save
-  #     # success message
-  #   else
-  #     # error message
-  #   end
-  # end
+  def self.get_coords(rgeo_bbox)
+    { max_x: rgeo_bbox.max_x, 
+      max_y: rgeo_bbox.max_y, 
+      min_x: rgeo_bbox.min_x, 
+      min_y: rgeo_bbox.min_y }
+  end
 
-  # def self.get_coords(rgeo_bbox)
-  #   { max_x: rgeo_bbox.max_x, 
-  #     max_y: rgeo_bbox.max_y, 
-  #     min_x: rgeo_bbox.min_x, 
-  #     min_y: rgeo_bbox.min_y }
-  # end
+  def self.assert_successful_response(response)
+    return unless response.code.to_s == "200"
+    response.body
+  end
 
-  # def self.assert_successful_response(response)
-  #   return unless response.code.to_s == "200"
-  #   response.body
-  # end
+  def self.create_bbox(geom)
+    RGeo::Cartesian::BoundingBox.create_from_geometry(geom)
+  end
 
-  # def self.create_bbox(geom)
-  #   RGeo::Cartesian::BoundingBox.create_from_geometry(geom)
-  # end
-
-  # def self.factory
-  #   RGeo::Geographic.spherical_factory(:srid => 4326)
-  # end
+  def self.factory
+    RGeo::Geographic.spherical_factory(:srid => 4326)
+  end
 
 
   # def self.make_request(uri, headers, http_method, bodycontent)
