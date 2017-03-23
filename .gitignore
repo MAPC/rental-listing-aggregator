@@ -18,8 +18,11 @@
 
 # Ignore database dumps and imports
 /db_dumps/*
+!/db_dumps/.gitkeep
 /db_import/*
+!/db_import/.gitkeep
 /geojson/*
+!/geojson/.gitkeep
 
 .DS_Store
 
