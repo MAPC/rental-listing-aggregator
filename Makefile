@@ -3,6 +3,9 @@ SHELL= /bin/bash
 setup-db:
 	docker-compose run ruby bundle exec rake db:setup
 
+migrate-db:
+	docker-compose run ruby bundle exec rake db:migrate
+
 export-db:
 	docker-compose exec db sh -c 'pg_dump rent_aggregator_db' > db_dumps/db_$(shell date +"%Y%m%d%H%M").sql
 

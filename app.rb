@@ -23,6 +23,7 @@ end
 class Listing < ActiveRecord::Base
   belongs_to :source
   belongs_to :survey
+  validates :location, :title, :uid, presence: true
 end
 
 class Municipality < ActiveRecord::Base
@@ -33,15 +34,15 @@ end
 
 class Crawl
   def initialize
-    self.load_demux
-    self.crawl_all
+    load_demux
+    crawl_all
   end
 
   def crawl_all
     # dynamically trigger crawlers from db, found in ./demux. New Sources must be entered into the database.
     sources = Source.all
     sources.each do |r|
-      print "***SCRAPING " + r.title + "***\n"
+      print '***SCRAPING ' + r.title + "***\n"
       klass = Object.const_get(r.script)
       klass.crawl
     end
@@ -49,7 +50,7 @@ class Crawl
 
   def load_demux
     # Load in crawler scripts. Loads in case the files are edited. 
-    Dir[File.dirname(__FILE__) + '/mux/*.rb'].each {|file| load file }
+    Dir[File.dirname(__FILE__) + '/mux/*.rb'].each { |file| load file }
   end
 end
 
