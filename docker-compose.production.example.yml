@@ -1,0 +1,34 @@
+version: '3'
+services:
+  ruby:
+    build: .
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - db
+    command: ""
+    environment:
+      CRAIGSLIST_URL: 'https://raleigh.craigslist.org'
+      PADMAPPER_MAX_LON: -78.2830810546875
+      PADMAPPER_MAX_LAT: 35.61064120176672
+      PADMAPPER_MIN_LON: -79.2388916015625
+      PADMAPPER_MIN_LAT: 36.102598376304925
+      #MAX_RESULTS: 1
+      RACK_ENV: 'production'
+  db:
+    image: mdillon/postgis:9.6-alpine
+    volumes:
+    # To persist the postgres database to the host machine storage, enable this volume mapping.
+    #  - ./postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: 'rent_aggregator_db'
+      POSTGRES_USER: 'root'
+      POSTGRES_PASSWORD: 'secret'
+
+#   Uncomment this section for logging
+#  log:
+#    image: gliderlabs/logspout
+#    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock
+#    container_name: logspout
+#    command: "syslog+tls://logs.papertrailapp.com:1111"
