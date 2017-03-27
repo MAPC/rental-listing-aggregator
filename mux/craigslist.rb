@@ -3,8 +3,9 @@ module Craigslist
   @@base_url = ENV['CRAIGSLIST_URL']
 
   @results_count = 0
+
   def self.crawl
-    uri = URI(@@base_url + '/jsonsearch/apa/')
+    uri = URI(@@base_url + '/jsonsearch/apa/?map=1')
     res = Net::HTTP.get_response(uri)
     results = JSON.parse(assert_successful_response(res)).first
     survey  = Survey.create
@@ -27,6 +28,7 @@ module Craigslist
 
     results.each do |r|
       create_listing_from_result(r, survey) unless r.has_key?('GeoCluster')
+      fetch_nested(r.fetch('url'), survey) if r.has_key?('GeoCluster')
     end
   end
 
