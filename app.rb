@@ -32,6 +32,7 @@ end
 
 class Crawl
   def initialize
+    print "Running crawler\n"
     load_demux
     crawl_all
   end

@@ -80,7 +80,7 @@ module Craigslist
       end
       print 'New/changed Cragislist result ' + @results_count.to_s + ': ' + l.title + "\n" if ENV['RACK_ENV'] = 'development'
     else
-      print 'FAILURE on Craigslist: ' + l.title + "\n" if ENV['RACK_ENV'] = 'development'
+      print 'FAILURE on Craigslist: ' + l.title + "\n"
     end
   end
 
