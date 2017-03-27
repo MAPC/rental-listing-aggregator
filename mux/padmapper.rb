@@ -105,7 +105,7 @@ module Padmapper
 
     # Creating a listing
     l = Listing.find_or_initialize_by(uid: r['listing_id'])
-    
+
     fields_changed = []
     unless l.new_record?
       fields_changed << 'ask' unless l.ask == price
@@ -121,14 +121,15 @@ module Padmapper
     l.source = @@source
     l.payload = r.to_json
 
+    @results_count += 1
+    return unless l.new_record? || fields_changed.count > 0
     if l.save
-      @results_count += 1
-      @new_results += 1 if l.new_record?
+      @new_results += 1 if fields_changed.count.zero?
       if fields_changed.count > 0
         @changed_results += 1
         print "Changed fields: " + fields_changed.join(' ') + "\n"
       end
-      print 'Padmapper Result ' + @results_count.to_s + ': ' + l.title + "\n" if ENV['RACK_ENV'] = 'development'
+      print 'New/changed padmapper result ' + @results_count.to_s + ': ' + l.title + "\n" if ENV['RACK_ENV'] = 'development'
     else
       print 'FAILURE on Padmapper ' + @results_count.to_s + ': ' + l.title + "\n" if ENV['RACK_ENV'] = 'development'
     end
