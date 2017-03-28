@@ -78,7 +78,7 @@ module Craigslist
         @changed_results += 1
         print "Changed fields: " + fields_changed.join(' ') + "\n"
       end
-      print 'New/changed Cragislist result ' + @results_count.to_s + ': ' + l.title + "\n" if ENV['RACK_ENV'] = 'development'
+      print 'New/changed Cragislist result ' + @results_count.to_s + ': ' + l.title + "\n" if ENV['RACK_ENV'] == 'development'
     else
       print 'FAILURE on Craigslist: ' + l.title + "\n"
     end

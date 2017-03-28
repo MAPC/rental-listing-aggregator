@@ -129,7 +129,7 @@ module Padmapper
         @changed_results += 1
         print "Changed fields: " + fields_changed.join(' ') + "\n"
       end
-      print 'New/changed padmapper result ' + @results_count.to_s + ': ' + l.title + "\n" if ENV['RACK_ENV'] = 'development'
+      print 'New/changed padmapper result ' + @results_count.to_s + ': ' + l.title + "\n" if ENV['RACK_ENV'] == 'development'
     else
       print 'FAILURE on Padmapper ' + @results_count.to_s + ': ' + l.title + "\n"
     end
