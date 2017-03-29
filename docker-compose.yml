@@ -13,7 +13,8 @@ services:
       PADMAPPER_MAX_LAT: 35.61064120176672
       PADMAPPER_MIN_LON: -79.2388916015625
       PADMAPPER_MIN_LAT: 36.102598376304925
-      MAX_RESULTS: 10
+      # Uncomment the following line to only pull a small set of results when developing
+      # MAX_RESULTS: 10
   db:
     image: mdillon/postgis:9.6-alpine
     volumes:
