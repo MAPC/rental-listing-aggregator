@@ -120,9 +120,9 @@ module Padmapper
     l.survey = @@current_survey
     l.source = @@source
     l.payload = r.to_json
+    l.last_seen = DateTime.now
 
     @results_count += 1
-    return unless l.new_record? || fields_changed.count > 0
     if l.save
       @new_results += 1 if fields_changed.count.zero?
       if fields_changed.count > 0
