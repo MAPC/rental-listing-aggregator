@@ -19,6 +19,8 @@ services:
     image: mdillon/postgis:9.6-alpine
     volumes:
       - ./db_import:/docker-entrypoint-initdb.d
+      - ./db_dumps:/var/db_dumps
+      - ./geojson:/var/geojson
     # To persist the postgres database to the host machine storage, enable this volume mapping.
     #  - ./postgres_data:/var/lib/postgresql/data
     environment:
