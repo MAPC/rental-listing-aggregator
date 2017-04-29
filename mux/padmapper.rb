@@ -7,6 +7,8 @@ module Padmapper
   @@zumpertoken = nil
   @@tokens = nil
   @results_count = 0
+  @new_results = 0
+  @changed_results = 0
 
   def self.crawl
     get_tokens
@@ -16,6 +18,7 @@ module Padmapper
         factory.point(ENV['PADMAPPER_MAX_LON'], ENV['PADMAPPER_MAX_LAT'])
     )
     recursive_subdivide([bboxs])
+    print sprintf("Padmapper: %d results, %d new, %d changed\n", @results_count, @new_results, @changed_results)
   end
 
   def self.filters(bbox)
@@ -99,20 +102,34 @@ module Padmapper
     location = factory.point r['lng'], r['lat']
     date = DateTime.strptime r['listed_on'].to_s, '%s'
     price = (r['min_price'] + r['max_price']) / 2 #average price
-    # Creating a listing
-    l = Listing.new location: location,
-                ask: price,
-                bedrooms: r['max_bedrooms'],
-                title: r['address'],
-                posting_date: date,
-                survey: @@current_survey,
-                source: @@source,
-                payload: r.to_json,
-                uid: r['listing_id']
 
+    # Creating a listing
+    l = Listing.find_or_initialize_by(uid: r['listing_id'])
+
+    fields_changed = []
+    unless l.new_record?
+      fields_changed << 'ask' unless l.ask == price
+      fields_changed << 'title' unless l.title == r['address']
+      fields_changed << 'location' unless l.location.x == location.x && l.location.y == location.y
+    end
+    l.location = location
+    l.ask = price
+    l.bedrooms = r['max_bedrooms']
+    l.title = r['address']
+    l.posting_date = date
+    l.survey = @@current_survey
+    l.source = @@source
+    l.payload = r.to_json
+    l.last_seen = DateTime.now
+
+    @results_count += 1
     if l.save
-      @results_count += 1
-      print 'Padmapper Result ' + @results_count.to_s + ': ' + l.title + "\n"
+      @new_results += 1 if fields_changed.count.zero?
+      if fields_changed.count > 0
+        @changed_results += 1
+        print "Changed fields: " + fields_changed.join(' ') + "\n"
+      end
+      print 'New/changed padmapper result ' + @results_count.to_s + ': ' + l.title + "\n" if ENV['RACK_ENV'] == 'development'
     else
       print 'FAILURE on Padmapper ' + @results_count.to_s + ': ' + l.title + "\n"
     end
