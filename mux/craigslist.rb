@@ -8,7 +8,7 @@ module Craigslist
   @changed_results = 0
 
   def self.crawl
-    uri = URI(@@base_url + '/jsonsearch/apa/?map=1')
+    uri = URI(@@base_url + '/jsonsearch/aap?map=1')
     res = Net::HTTP.get_response(uri)
     results = JSON.parse(assert_successful_response(res)).first
     survey  = Survey.create
@@ -52,15 +52,19 @@ module Craigslist
     date = DateTime.strptime r['PostedDate'].to_s, '%s'
 
     # Creating a listing
-    l = Listing.find_or_initialize_by(uid: r['PostingURL'])
+    #l = Listing.find_or_initialize_by(uid: r['PostingURL'])
+    l = Listing.create
+    l.uid = r['PostingURL']
 
     # Track which fields are changing so that we have a sense of hwo to logically do deduplication
     fields_changed = []
-    unless l.new_record?
-      fields_changed << 'ask' unless l.ask == r.fetch('Ask') { :default }
-      fields_changed << 'title' unless l.title == r['PostingTitle']
-      fields_changed << 'location' unless l.location.x == location.x && l.location.y == location.y
-    end
+
+    #unless l.new_record?
+    #  fields_changed << 'ask' unless l.ask == r.fetch('Ask') { :default }
+    #  fields_changed << 'title' unless l.title == r['PostingTitle']
+    #  fields_changed << 'location' unless l.location.x == location.x && l.location.y == location.y
+    #end
+
     l.location = location
     l.ask = r.fetch('Ask') { :default }
     l.bedrooms = r['Bedrooms']

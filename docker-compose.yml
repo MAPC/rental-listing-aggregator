@@ -8,11 +8,12 @@ services:
       - db
     command: ""
     environment:
-      CRAIGSLIST_URL: 'https://raleigh.craigslist.org'
-      PADMAPPER_MAX_LON: -78.2830810546875
-      PADMAPPER_MAX_LAT: 35.61064120176672
-      PADMAPPER_MIN_LON: -79.2388916015625
-      PADMAPPER_MIN_LAT: 36.102598376304925
+      CRAIGSLIST_URL: 'https://boston.craigslist.org'
+      PADMAPPER_MAX_LON: -70.55015359141407
+      PADMAPPER_MAX_LAT: 42.82800417471581
+      PADMAPPER_MIN_LON: -71.70406136729298
+      PADMAPPER_MIN_LAT: 41.98895821456554
+      RACK_ENV: 'production'
       # Uncomment the following line to only pull a small set of results when developing
       # MAX_RESULTS: 10
   db:

@@ -106,12 +106,19 @@ module Padmapper
     # Creating a listing
     l = Listing.find_or_initialize_by(uid: r['listing_id'])
 
+    puts l.class
+
+    return unless l.new_record?
+
     fields_changed = []
-    unless l.new_record?
-      fields_changed << 'ask' unless l.ask == price
-      fields_changed << 'title' unless l.title == r['address']
-      fields_changed << 'location' unless l.location.x == location.x && l.location.y == location.y
-    end
+
+
+    #unless l.new_record?
+    #  fields_changed << 'ask' unless l.ask == price
+    #  fields_changed << 'title' unless l.title == r['address']
+    #  fields_changed << 'location' unless l.location.x == location.x && l.location.y == location.y
+    #end
+
     l.location = location
     l.ask = price
     l.bedrooms = r['max_bedrooms']
@@ -121,6 +128,8 @@ module Padmapper
     l.source = @@source
     l.payload = r.to_json
     l.last_seen = DateTime.now
+
+    puts l.inspect
 
     @results_count += 1
     if l.save
