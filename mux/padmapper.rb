@@ -2,7 +2,7 @@ module Padmapper
   @@stash = []
   @@stacks = 0
   @@current_survey = Survey.create
-  @@source = Source.find_by title: 'Padmapper'
+  @@source = Source.find_by(title: 'Padmapper')
   @@csrftoken = nil
   @@zumpertoken = nil
   @@tokens = nil
@@ -17,6 +17,7 @@ module Padmapper
         factory.point(ENV['PADMAPPER_MIN_LON'], ENV['PADMAPPER_MIN_LAT']),
         factory.point(ENV['PADMAPPER_MAX_LON'], ENV['PADMAPPER_MAX_LAT'])
     )
+
     recursive_subdivide([bboxs])
     print sprintf("Padmapper: %d results, %d new, %d changed\n", @results_count, @new_results, @changed_results)
   end
@@ -68,85 +69,65 @@ module Padmapper
     http.request(request).body
   end
 
-  def self.bundle 
-    # include header codes required for successful API requests
-    'https://www.padmapper.com/api/t/1/bundle'
-  end
-
-  def self.listables
-    'https://www.padmapper.com/api/t/1/pages/listables'
-  end
-
   def self.assert_batch_has_unique(array)
     ids = array.map { |x| x['listing_id'] }
-    ids.any? { |id| !@@stash.include? id }
+    ids.any? { |id| !@@stash.include?(id) }
   end
 
   def self.recursive_subdivide(bboxs)
-    bboxs.each do |r|
-      sleep(2)
+    bboxs.each do |box|
       break if ENV['MAX_RESULTS'] && @results_count > ENV['MAX_RESULTS'].to_i
-      results = JSON.parse(crawl_slice(filters(r)))
-      next unless assert_batch_has_unique(results) && results.count > 0
+      sleep(2)
+
+      begin
+        results = JSON.parse(crawl_slice(filters(box)))
+        next unless assert_batch_has_unique(results) && results.count > 0
+      rescue Exception => e
+        puts e.message
+        next
+      end
+
       @@stacks += 1
       @@stash.concat results.map { |x| x['listing_id'] }
+
       results.each do |r|
-        create_listing_from_result(r)
+        begin
+          create_listing_from_result(r)
+        rescue Exception => e
+          puts e.message
+        end
       end
-      recursive_subdivide(r.subdivide)
+
+      recursive_subdivide(box.subdivide)
     end
   end
 
   def self.create_listing_from_result(result)
-    r = result
-    location = factory.point r['lng'], r['lat']
-    date = DateTime.strptime r['listed_on'].to_s, '%s'
-    price = (r['min_price'] + r['max_price']) / 2 #average price
+    location = factory.point(result['lng'], result['lat'])
+    date = DateTime.strptime(result['listed_on'].to_s, '%s')
+    avg_price = (result['min_price'] + result['max_price']) / 2
 
     # Creating a listing
-    l = Listing.find_or_initialize_by(uid: r['listing_id'])
-
-    puts l.class
-
+    l = Listing.find_or_initialize_by(uid: result['listing_id'])
     return unless l.new_record?
 
-    fields_changed = []
-
-
-    #unless l.new_record?
-    #  fields_changed << 'ask' unless l.ask == price
-    #  fields_changed << 'title' unless l.title == r['address']
-    #  fields_changed << 'location' unless l.location.x == location.x && l.location.y == location.y
-    #end
-
     l.location = location
-    l.ask = price
-    l.bedrooms = r['max_bedrooms']
-    l.title = r['address']
+    l.ask = avg_price
+    l.bedrooms = result['max_bedrooms']
+    l.title = result['address']
     l.posting_date = date
     l.survey = @@current_survey
     l.source = @@source
-    l.payload = r.to_json
+    l.payload = result.to_json
     l.last_seen = DateTime.now
-
-    puts l.inspect
 
     @results_count += 1
     if l.save
-      @new_results += 1 if fields_changed.count.zero?
-      if fields_changed.count > 0
-        @changed_results += 1
-        print "Changed fields: " + fields_changed.join(' ') + "\n"
-      end
-      print 'New/changed padmapper result ' + @results_count.to_s + ': ' + l.title + "\n" if ENV['RACK_ENV'] == 'development'
+      @new_results += 1
+      print 'New Padmapper result ' + @results_count.to_s + ': ' + l.title + "\n" if ENV['RACK_ENV'] == 'development'
     else
       print 'FAILURE on Padmapper ' + @results_count.to_s + ': ' + l.title + "\n"
     end
-  end
-
-  def self.assert_successful_response(response)
-    return unless response.code.to_s == '200'
-    response.body
   end
 
   def self.factory

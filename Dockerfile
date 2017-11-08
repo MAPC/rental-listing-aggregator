@@ -10,7 +10,6 @@ COPY ./Gemfile /usr/src/app/Gemfile
 COPY ./Gemfile.lock /usr/src/app/Gemfile.lock
 
 RUN gem update --system && \
-    gem install bundler && \
     bundle install
 
 COPY . /usr/src/app

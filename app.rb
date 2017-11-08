@@ -32,24 +32,21 @@ end
 
 class Crawl
   def initialize
-    print "Running crawler\n"
-    load_demux
+    puts 'Running crawler'
+    load_mux
     crawl_all
   end
 
-  def crawl_all
-    # dynamically trigger crawlers from db, found in ./demux. New Sources must be entered into the database.
-    sources = Source.all
-    sources.each do |r|
-      print '***SCRAPING ' + r.title + "***\n"
-      klass = Object.const_get(r.script)
-      klass.crawl
-    end
+  def load_mux
+    Dir[File.dirname(__FILE__) + '/mux/*.rb'].each { |file| load file }
   end
 
-  def load_demux
-    # Load in crawler scripts. Loads in case the files are edited. 
-    Dir[File.dirname(__FILE__) + '/mux/*.rb'].each { |file| load file }
+  def crawl_all
+    Source.all.each do |source|
+      puts "***SCRAPING #{source.title} ***"
+      klass = Object.const_get(source.script)
+      klass.crawl
+    end
   end
 end
 
