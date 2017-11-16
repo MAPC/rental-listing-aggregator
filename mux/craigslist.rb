@@ -9,11 +9,21 @@ module Craigslist
 
   def self.crawl
     uri = URI(@@base_url + '/jsonsearch/aap?map=1')
-    res = Net::HTTP.get_response(uri)
+
+    begin
+      res = Net::HTTP.get_response(uri)
+    rescue Exception => e
+      Raven.capture_exception(e)
+
+      puts 'Could not connect to Craigslist. Aborting Craigslist scrape...'
+      sleep(1)
+      return
+    end
+
     results = JSON.parse(assert_successful_response(res)).first
     survey  = Survey.create
-    # Iterating
 
+    # Iterating
     results.each do |r|
       create_listing_from_result(r, survey) unless r.has_key?('GeoCluster')
       break if ENV['MAX_RESULTS'] && @results_count > ENV['MAX_RESULTS'].to_i
@@ -28,7 +38,17 @@ module Craigslist
     sleep(5)
     geocluster_url = @@base_url + geocluster
     uri = URI(geocluster_url)
-    res = Net::HTTP.get_response(uri)
+
+    begin
+      res = Net::HTTP.get_response(uri)
+    rescue Exception => e
+      Raven.capture_exception(e)
+
+      puts "Could not connect to Craiglist at #{geocluster_url}\n Aborting..."
+      sleep(1)
+      return
+    end
+
     results = JSON.parse( assert_successful_response (res) ).first
 
     results.each do |r|

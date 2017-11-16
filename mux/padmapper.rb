@@ -83,18 +83,21 @@ module Padmapper
         results = JSON.parse(crawl_slice(filters(box)))
         next unless assert_batch_has_unique(results) && results.count > 0
       rescue Exception => e
-        puts e.message
+        Raven.capture_exception(e)
+
+        puts 'Could not connect to Padmapper slice. Continuing...'
         next
       end
 
       @@stacks += 1
       @@stash.concat results.map { |x| x['listing_id'] }
 
-      results.each do |r|
+      results.each do |result|
         begin
-          create_listing_from_result(r)
+          create_listing_from_result(result)
         rescue Exception => e
-          puts e.message
+          Raven.capture_exception(e)
+          puts 'Could not create listing record from Padmapper result. Continuing...'
         end
       end
 

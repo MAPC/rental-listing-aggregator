@@ -2,6 +2,8 @@ require 'sinatra'
 require 'sinatra/activerecord'
 require 'json'
 require 'activerecord-postgis-adapter'
+require 'sentry-raven'
+
 
 ##########
 # Models #
