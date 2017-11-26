@@ -50,6 +50,10 @@ class Crawl
       klass.crawl
     end
   end
+
+  def send_mail
+
+  end
 end
 
 module Job
