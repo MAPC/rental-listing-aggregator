@@ -67,8 +67,8 @@ class Crawl
       recipients = mail_info['recipients']
 
       if recipients.size > 0
-        mg_client = Mailgun::Client.new(ENV['MAILGUN_API_KEY'])
-        batch = Mailgun::BatchMessage.new(mg_client, ENV['MAILGUN_DOMAIN'])
+        mailer = Mailgun::Client.new(ENV['MAILGUN_API_KEY'])
+        batch = Mailgun::BatchMessage.new(mailer, ENV['MAILGUN_DOMAIN'])
 
         batch.from(sender["email"], sender["name"])
         batch.subject("Scrape Results from the Rental Listings Aggregator")
@@ -76,16 +76,19 @@ class Crawl
         message = @results.map { |result| "#{result['title']} provided #{result['quantity']} listings" }
         message = message.join("\n")
 
-        puts message
-
-        return
         batch.body_text(message)
 
         recipients.each do |recipient|
           batch.add_recipient(:to, recipient["email"], recipient["name"])
         end
 
+        begin
+          mailer.send_message(ENV['MAILGUN_DOMAIN'], batch)
+        rescue Exception => e
+          Raven.capture_exception(e)
 
+          puts 'Could not send emails'
+        end
       else
         puts 'No email recipients defined'
       end
