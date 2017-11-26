@@ -8,7 +8,6 @@ module Craigslist
   @changed_results = 0
 
   def self.crawl
-    return 75
     uri = URI(@@base_url + '/jsonsearch/aap?map=1')
 
     begin

@@ -11,7 +11,6 @@ module Padmapper
   @changed_results = 0
 
   def self.crawl
-    return 150
     get_tokens
 
     bboxs = RGeo::Cartesian::BoundingBox.create_from_points(
