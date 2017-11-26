@@ -1,4 +1,11 @@
 {
+  "sender": {
+    "email": "",
+    "name": {
+      "first": "",
+      "last": ""
+    }
+  },
   "recipients": [
     {
       "email": "",

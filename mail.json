@@ -1,0 +1,25 @@
+{
+  "sender": {
+    "email": "rla@mailgun2.mapc.org",
+    "name": {
+      "first": "Rental Listings",
+      "last": "Aggregator"
+    }
+  },
+  "recipients": [
+    {
+      "email": "eyoungberg@mapc.org",
+      "name": {
+        "first": "Eric",
+        "last": "Youngberg"
+      }
+    },
+    {
+      "email": "eric@lmtlss.net",
+      "name": {
+        "first": "Erik",
+        "last": "Youngberg"
+      }
+    } 
+  ]
+}
