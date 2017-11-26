@@ -29,4 +29,5 @@
 # Ignore production config
 docker-compose.production.yml
 docker-compose.yml
+recipients.json
 config/database.yml

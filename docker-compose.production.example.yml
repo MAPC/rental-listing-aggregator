@@ -13,8 +13,10 @@ services:
       PADMAPPER_MAX_LAT: 35.61064120176672
       PADMAPPER_MIN_LON: -79.2388916015625
       PADMAPPER_MIN_LAT: 36.102598376304925
-      #MAX_RESULTS: 1
       RACK_ENV: 'production'
+      SENTRY_DSN: ''
+      MAILGUN_API_KEY: ''
+      #MAX_RESULTS: 1
   db:
     image: mdillon/postgis:9.6-alpine
     volumes:

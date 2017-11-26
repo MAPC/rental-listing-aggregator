@@ -3,6 +3,7 @@ require 'sinatra/activerecord'
 require 'json'
 require 'activerecord-postgis-adapter'
 require 'sentry-raven'
+require 'mailgun'
 
 
 ##########
@@ -34,9 +35,10 @@ end
 
 class Crawl
   def initialize
-    puts 'Running crawler'
-    load_mux
-    crawl_all
+#    puts 'Running crawler'
+#    load_mux
+#    crawl_all
+    send_mail
   end
 
   def load_mux
@@ -52,7 +54,23 @@ class Crawl
   end
 
   def send_mail
+    recipients_file_path = File.join(File.dirname(__FILE__), 'recipients.json')
 
+    if File.exist?(recipients_file_path)
+      recipients_file = File.read(recipients_file_path)
+      recipients = JSON.parse(recipients_file)['recipients']
+
+      if recipients.size > 0
+        mg_client = Mailgun::Client.new(ENV['MAILGUN_API_KEY'])
+        batch = Mailgun::BatchMessage.new(mg_client, 'mail2.mapc.org')
+
+        puts recipients
+      else
+        puts 'No email recipients defined'
+      end
+    else
+      puts 'No recipients.json file in project root'
+    end
   end
 end
 
