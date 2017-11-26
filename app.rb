@@ -62,7 +62,7 @@ class Crawl
 
       if recipients.size > 0
         mg_client = Mailgun::Client.new(ENV['MAILGUN_API_KEY'])
-        batch = Mailgun::BatchMessage.new(mg_client, 'mail2.mapc.org')
+        batch = Mailgun::BatchMessage.new(mg_client, ENV['MAILGUN_DOMAIN'])
 
         puts recipients
       else

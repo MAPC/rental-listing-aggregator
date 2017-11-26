@@ -16,6 +16,7 @@ services:
       RACK_ENV: 'production'
       SENTRY_DSN: ''
       MAILGUN_API_KEY: ''
+      MAILGUN_DOMAIN: ''
       #MAX_RESULTS: 1
   db:
     image: mdillon/postgis:9.6-alpine
