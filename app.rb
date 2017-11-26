@@ -34,10 +34,13 @@ end
 ###########
 
 class Crawl
+
   def initialize
-#    puts 'Running crawler'
-#    load_mux
-#    crawl_all
+    @results = []
+
+    puts 'Running crawler'
+    load_mux
+    crawl_all
     send_mail
   end
 
@@ -49,11 +52,15 @@ class Crawl
     Source.all.each do |source|
       puts "***SCRAPING #{source.title} ***"
       klass = Object.const_get(source.script)
-      klass.crawl
+      quantity = klass.crawl 
+
+      @results << { "title" => source.title, "quantity" => quantity }
     end
   end
 
   def send_mail
+    puts @results
+
     recipients_file_path = File.join(File.dirname(__FILE__), 'recipients.json')
 
     if File.exist?(recipients_file_path)
@@ -63,8 +70,6 @@ class Crawl
       if recipients.size > 0
         mg_client = Mailgun::Client.new(ENV['MAILGUN_API_KEY'])
         batch = Mailgun::BatchMessage.new(mg_client, ENV['MAILGUN_DOMAIN'])
-
-        puts recipients
       else
         puts 'No email recipients defined'
       end

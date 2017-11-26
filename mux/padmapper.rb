@@ -11,6 +11,7 @@ module Padmapper
   @changed_results = 0
 
   def self.crawl
+    return 150
     get_tokens
 
     bboxs = RGeo::Cartesian::BoundingBox.create_from_points(
@@ -20,6 +21,8 @@ module Padmapper
 
     recursive_subdivide([bboxs])
     print sprintf("Padmapper: %d results, %d new, %d changed\n", @results_count, @new_results, @changed_results)
+
+    return @results_count
   end
 
   def self.filters(bbox)

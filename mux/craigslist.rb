@@ -8,6 +8,7 @@ module Craigslist
   @changed_results = 0
 
   def self.crawl
+    return 75
     uri = URI(@@base_url + '/jsonsearch/aap?map=1')
 
     begin
@@ -31,6 +32,8 @@ module Craigslist
     end
 
     print sprintf("Craigslist: %d results, %d new, %d changed\n", @results_count, @new_results, @changed_results)
+
+    return @results_count
   end
 
   def self.fetch_nested(geocluster, survey)
