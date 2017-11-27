@@ -59,7 +59,8 @@ class Crawl
   end
 
   def send_mail
-    mail_file_path = File.join(File.dirname(__FILE__), 'mail.json')
+    mail_file = 'mail.json'
+    mail_file_path = File.join(File.dirname(__FILE__), mail_file)
 
     if File.exist?(mail_file_path)
       mail_info = JSON.parse(File.read(mail_file_path))
@@ -83,6 +84,7 @@ class Crawl
         end
 
         begin
+          puts 'Sending emails'
           mailer.send_message(ENV['MAILGUN_DOMAIN'], batch)
         rescue Exception => e
           Raven.capture_exception(e)
@@ -93,7 +95,7 @@ class Crawl
         puts 'No email recipients defined'
       end
     else
-      puts 'No recipients.json file in project root'
+      puts "No #{mail_file} file in project root"
     end
   end
 end
