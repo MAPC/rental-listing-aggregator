@@ -1,4 +1,4 @@
-FROM ruby:2.1.2
+FROM ruby:2.3.2
 
 RUN apt-get update && apt-get install -y wget
 RUN wget https://github.com/jwilder/dockerize/releases/download/v0.1.0/dockerize-linux-amd64-v0.1.0.tar.gz

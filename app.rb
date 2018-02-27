@@ -85,7 +85,8 @@ class Crawl
 
         begin
           puts 'Sending emails'
-          mailer.send_message(ENV['MAILGUN_DOMAIN'], batch)
+
+          batch.finalize
         rescue Exception => e
           Raven.capture_exception(e)
 
