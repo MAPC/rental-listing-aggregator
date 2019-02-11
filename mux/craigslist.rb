@@ -12,7 +12,7 @@ module Craigslist
 
     begin
       res = Net::HTTP.get_response(uri)
-    rescue Exception => e
+    rescue StandardError => e
       Raven.capture_exception(e)
 
       puts 'Could not connect to Craigslist. Aborting Craigslist scrape...'
@@ -25,7 +25,12 @@ module Craigslist
 
     # Iterating
     results.each do |r|
-      create_listing_from_result(r, survey) unless r.has_key?('GeoCluster')
+      begin
+        create_listing_from_result(r, survey) unless r.has_key?('GeoCluster')
+      rescue StandardError => e
+        Raven.capture_exception(e)
+      end
+
       break if ENV['MAX_RESULTS'] && @results_count > ENV['MAX_RESULTS'].to_i
       fetch_nested(r.fetch('url'), survey) if r.has_key?('GeoCluster')
     end
@@ -43,7 +48,7 @@ module Craigslist
 
     begin
       res = Net::HTTP.get_response(uri)
-    rescue Exception => e
+    rescue StandardError => e
       Raven.capture_exception(e)
 
       puts "Could not connect to Craiglist at #{geocluster_url}\n Aborting..."
@@ -54,7 +59,12 @@ module Craigslist
     results = JSON.parse( assert_successful_response (res) ).first
 
     results.each do |r|
-      create_listing_from_result(r, survey) unless r.has_key?('GeoCluster')
+      begin
+        create_listing_from_result(r, survey) unless r.has_key?('GeoCluster')
+      rescue StandardError => e
+        Raven.capture_exception(e)
+      end
+
       fetch_nested(r.fetch('url'), survey) if r.has_key?('GeoCluster')
     end
   end
