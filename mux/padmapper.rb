@@ -26,6 +26,7 @@ module Padmapper
 
   def self.filters(bbox)
     {
+      external: true,
       limit: 100,
       maxLat: bbox.max_y,
       minLat: bbox.min_y,
