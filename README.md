@@ -25,6 +25,7 @@ container in `docker-compose.yml`
 - Localize the configuration to your area via settings in `docker-compose.yml`:
     - Set `CRAIGSLIST_URL` to the base URL for your locality's Craigslist site
     - Set `PADMAPPER_MAX_LAT`, `PADMAPPER_MIN_LON` etc. to specify the bounding box for padmapper results.
+- We keep a backup of our production congfiguration at `smb://data-001/Public/DataServices/Projects/Current_Projects/rental_listings_research/Documentation/docker-compose.production.yml.bak`
 
 Running
 ---
