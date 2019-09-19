@@ -4,6 +4,7 @@ require 'json'
 require 'activerecord-postgis-adapter'
 require 'sentry-raven'
 require 'mailgun'
+require 'dotenv/load'
 
 
 ##########
@@ -13,7 +14,7 @@ require 'mailgun'
 class Source < ActiveRecord::Base
   has_many :listings
 
-  def crawl 
+  def crawl
     klass = Object.const_get(self.script)
     klass.crawl
   end
@@ -52,7 +53,7 @@ class Crawl
     Source.all.each do |source|
       puts "***SCRAPING #{source.title} ***"
       klass = Object.const_get(source.script)
-      quantity = klass.crawl 
+      quantity = klass.crawl
 
       @results << { "title" => source.title, "quantity" => quantity }
     end
@@ -73,7 +74,7 @@ class Crawl
 
         batch.from(sender["email"], sender["name"])
         batch.subject("Scrape Results from the Rental Listings Aggregator")
-    
+
         message = @results.map { |result| "#{result['title']} provided #{result['quantity']} listings" }
         message = message.join("\n")
 

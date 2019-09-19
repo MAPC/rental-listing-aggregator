@@ -21,6 +21,7 @@ GEM
     builder (3.2.2)
     domain_name (0.5.20170404)
       unf (>= 0.0.5, < 1.0.0)
+    dotenv (2.6.0)
     faraday (0.13.1)
       multipart-post (>= 1.2, < 3)
     http-cookie (1.0.3)
@@ -75,6 +76,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-postgis-adapter
+  dotenv
   json
   mailgun-ruby
   pg
@@ -86,4 +88,4 @@ DEPENDENCIES
   sinatra-activerecord
 
 BUNDLED WITH
-   1.16.0
+   2.0.1

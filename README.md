@@ -1,6 +1,14 @@
 # Rentscape
 
-RentGhost is an open rental listing aggregator that schedules sampling crawls across multiple rental posting services. Eventually, the project intends to implement machine learning. 
+Rentscape is an open rental listing aggregator that schedules sampling crawls across multiple rental posting services. Eventually, the project intends to implement machine learning.
+
+## Install Steps
+
+1. Setup `database.yml`
+2. `rvm install 2.3.8`
+3. `gem install bundler`
+4. `bundle install`
+5. `bundle exec rake db:setup`
 
 Dependencies:
 - Docker
