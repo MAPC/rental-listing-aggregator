@@ -10,6 +10,8 @@ set :repo_url, "git@github.com:mapc/rental-listing-aggregator.git"
 # Default deploy_to directory is /var/www/my_app_name
 set :deploy_to, "/opt/rental-listing-aggregator"
 
+
+
 # Default value for :format is :airbrussh.
 # set :format, :airbrussh
 
@@ -21,7 +23,7 @@ set :deploy_to, "/opt/rental-listing-aggregator"
 # set :pty, true
 
 # Default value for :linked_files is []
-# append :linked_files, "config/database.yml"
+append :linked_files, "config/database.yml"
 
 # Default value for linked_dirs is []
 # append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system"
