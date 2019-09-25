@@ -8,7 +8,7 @@ module Craigslist
   @changed_results = 0
 
   def self.crawl
-    uri = URI(@@base_url + '/jsonsearch/aap?map=1')
+    uri = URI(@@base_url + '/jsonsearch/apa?map=1')
 
     begin
       res = Net::HTTP.get_response(uri)
