@@ -23,7 +23,7 @@ set :deploy_to, "/opt/rental-listing-aggregator"
 # set :pty, true
 
 # Default value for :linked_files is []
-append :linked_files, "config/database.yml"
+append :linked_files, "config/database.yml", "config/mail.json"
 
 # Default value for linked_dirs is []
 append :linked_dirs, "log", ".bundle"

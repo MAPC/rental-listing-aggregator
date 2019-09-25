@@ -60,8 +60,7 @@ class Crawl
   end
 
   def send_mail
-    mail_file = 'mail.json'
-    mail_file_path = File.join(File.dirname(__FILE__), mail_file)
+    mail_file_path = File.join(File.dirname(__FILE__), 'config', 'mail.json')
 
     if File.exist?(mail_file_path)
       mail_info = JSON.parse(File.read(mail_file_path))
