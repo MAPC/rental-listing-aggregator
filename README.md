@@ -35,6 +35,19 @@ container in `docker-compose.yml`
     - Set `PADMAPPER_MAX_LAT`, `PADMAPPER_MIN_LON` etc. to specify the bounding box for padmapper results.
 - We keep a backup of our production congfiguration at `smb://data-001/Public/DataServices/Projects/Current_Projects/rental_listings_research/Documentation/docker-compose.production.yml.bak`
 
+To schedule a regular CRON job without Docker insert something like this in your crontab after typing `crontab -e`:
+`3 0 * * 3  cd /opt/rental-listing-aggregator/current && RACK_ENV=production /usr/share/rvm/wrappers/ruby-2.3.8/rake scraper:scrape 2>&1 | /usr/bin/logger -t rental_listing_scraper`
+
+You also need to make sure you have configured your system environment variables. Potentially in /etc/environment.
+
+```
+CRAIGSLIST_URL='https://boston.craigslist.org'
+PADMAPPER_MAX_LON=-70.55015359141407
+PADMAPPER_MAX_LAT=42.82800417471581
+PADMAPPER_MIN_LON=-71.70406136729298
+PADMAPPER_MIN_LAT=41.98895821456554
+```
+
 Running
 ---
 
