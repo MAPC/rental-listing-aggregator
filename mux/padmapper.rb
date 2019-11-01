@@ -1,3 +1,5 @@
+require 'faraday'
+
 module Padmapper
   @@stash = []
   @@stacks = 0
@@ -20,6 +22,13 @@ module Padmapper
 
     recursive_subdivide([bboxs])
     print sprintf("Padmapper: %d results, %d new, %d changed\n", @results_count, @new_results, @changed_results)
+
+    conn = Faraday.new(:url => 'https://hooks.slack.com')
+    conn.post do |req|
+      req.url '/services/T031NFK37/BQ4TX0ZK8/UNGggcaanV8CnPlAIKEjSA1b'
+      req.headers['Content-Type'] = 'application/json'
+      req.body = "{ text: 'Padmapper: #{@results_count} results, #{@new_results} new, #{@changed_results} changed' }"
+    end
 
     return @results_count
   end
