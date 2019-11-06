@@ -27,7 +27,7 @@ module Padmapper
     conn.post do |req|
       req.url '/services/T031NFK37/BQ4TX0ZK8/UNGggcaanV8CnPlAIKEjSA1b'
       req.headers['Content-Type'] = 'application/json'
-      req.body = "{ text: 'Padmapper: #{@results_count} results, #{@new_results} new, #{@changed_results} changed' }"
+      req.body = "{\"text\":\"Padmapper: #{@results_count} results, #{@new_results} new, #{@changed_results} changed\"}"
     end
 
     return @results_count
