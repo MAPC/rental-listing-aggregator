@@ -122,7 +122,7 @@ DEPENDENCIES
   capistrano-rvm
   dotenv
   faraday
-  json
+  json (= 1.8.6)
   mailgun-ruby
   pg
   postgres_ext

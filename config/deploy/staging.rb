@@ -8,4 +8,4 @@ server "54.162.106.14", user: "rental-listing-aggregator", roles: %w{app db web}
 set :branch, 'develop'
 
 set :rvm_custom_path, '/usr/share/rvm'
-set :rvm_ruby_version, '2.3.8'
+set :rvm_ruby_version, '2.4.10'
