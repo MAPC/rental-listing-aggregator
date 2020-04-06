@@ -2,7 +2,6 @@ require 'sinatra'
 require 'sinatra/activerecord'
 require 'json'
 require 'activerecord-postgis-adapter'
-require 'sentry-raven'
 require 'mailgun'
 require 'dotenv/load'
 
@@ -88,8 +87,7 @@ class Crawl
 
           batch.finalize
         rescue Exception => e
-          Raven.capture_exception(e)
-
+          puts 'ERROR: ' + e.message
           puts 'Could not send emails'
         end
       else

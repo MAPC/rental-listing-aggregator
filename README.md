@@ -51,8 +51,25 @@ MAILGUN_API_KEY: ''
 MAILGUN_DOMAIN: ''
 ```
 
-Running
----
+## Database Migration
+To migrate from the apps database to the new Postgres 11.7 database we did
+
+```
+createuser rental-listing-aggregator -d -P -s
+
+createdb -O rental-listing-aggregator rental-listing-aggregator
+
+psql -h 127.0.0.1 -d rental-listing-aggregator -U rental-listing-aggregator -c "CREATE EXTENSION postgis;"
+
+pg_restore -d rental-listing-aggregator -h 127.0.0.1 -j 2 -O -x --no-data-for-failed-tables -n public -t listings -t sources -t surveys -U rental-listing-aggregator apps.dump
+
+psql -h 127.0.0.1 -d rental-listing-aggregator -U rental-listing-aggregator -f after-pg_restore.sql
+
+psql -h 127.0.0.1 -d rental-listing-aggregator -U rental-listing-aggregator -c "ALTER ROLE rental-listing-aggregator NOSUPERUSER;"
+```
+
+
+## Running (Old Instructions)
 
 - `docker-compose up --build` will build the ruby container and create the database.
 - `make setup-db` will create and seed the database.

@@ -15,8 +15,6 @@ module Craigslist
     begin
       res = Net::HTTP.get_response(uri)
     rescue StandardError => e
-      Raven.capture_exception(e)
-
       puts 'Could not connect to Craigslist. Aborting Craigslist scrape...'
       sleep(1)
       return
@@ -30,7 +28,7 @@ module Craigslist
       begin
         create_listing_from_result(r, survey) unless r.has_key?('GeoCluster')
       rescue StandardError => e
-        Raven.capture_exception(e)
+        puts 'ERROR: ' + e.message.to_s
       end
 
       break if ENV['MAX_RESULTS'] && @results_count > ENV['MAX_RESULTS'].to_i
@@ -58,8 +56,7 @@ module Craigslist
     begin
       res = Net::HTTP.get_response(uri)
     rescue StandardError => e
-      Raven.capture_exception(e)
-
+      puts 'ERROR: ' + e.message.to_s
       puts "Could not connect to Craiglist at #{geocluster_url}\n Aborting..."
       sleep(1)
       return
@@ -71,7 +68,7 @@ module Craigslist
       begin
         create_listing_from_result(r, survey) unless r.has_key?('GeoCluster')
       rescue StandardError => e
-        Raven.capture_exception(e)
+        puts 'ERROR: ' + e.message.to_s
       end
 
       fetch_nested(r.fetch('url'), survey) if r.has_key?('GeoCluster')
@@ -95,7 +92,7 @@ module Craigslist
     # Creating a listing
     #l = Listing.find_or_initialize_by(uid: r['PostingURL'])
     l = Listing.create
-    l.uid = r['PostingURL']
+    l.uid = result['PostingURL']
 
     # Track which fields are changing so that we have a sense of hwo to logically do deduplication
     fields_changed = []
@@ -122,11 +119,11 @@ module Craigslist
       @new_results += 1 if fields_changed.count.zero?
       if fields_changed.count > 0
         @changed_results += 1
-        print "Changed fields: " + fields_changed.join(' ') + "\n"
+        puts "Changed fields: " + fields_changed.join(' ') + "\n"
       end
-      print 'New/changed Cragislist result ' + @results_count.to_s + ': ' + l.title + "\n" if ENV['RACK_ENV'] == 'development'
+      puts 'New/changed Cragislist result ' + @results_count.to_s + ': ' + l.title + "\n" if ENV['RACK_ENV'] == 'development'
     else
-      print 'FAILURE on Craigslist: ' + l.title + "\n"
+      puts 'FAILURE on Craigslist: ' + l.title + "\n"
     end
   end
 

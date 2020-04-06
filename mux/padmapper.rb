@@ -95,7 +95,7 @@ module Padmapper
         results = JSON.parse(crawl_slice(filters(box)))
         next unless assert_batch_has_unique(results) && results.count > 0
       rescue Exception => e
-        Raven.capture_exception(e)
+        puts'ERROR: ' + e.message
 
         puts 'Could not connect to Padmapper slice. Continuing...'
         next
