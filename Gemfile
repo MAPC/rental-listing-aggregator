@@ -2,17 +2,16 @@ source "https://rubygems.org"
 
 gem 'pg'
 gem 'sinatra', '1.4.8'
-gem 'activerecord-postgis-adapter'
+gem 'activerecord-postgis-adapter', '5.2.2'
 gem 'sinatra-activerecord'
 gem 'rake'
-gem 'json', '1.8.6'
+gem 'json'
 gem 'postgres_ext'
 gem 'rgeo'
 gem 'mailgun-ruby'
 gem 'dotenv'
 gem 'rspec'
 gem 'faraday'
-gem 'pry-byebug'
 
 group :development do
   gem "capistrano", "~> 3.11", require: false

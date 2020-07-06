@@ -10,7 +10,11 @@ require 'dotenv/load'
 # Models #
 ##########
 
-class Source < ActiveRecord::Base
+class ApplicationRecord < ActiveRecord::Base
+  self.abstract_class = true
+end
+
+class Source < ApplicationRecord
   has_many :listings
 
   def crawl
@@ -19,11 +23,11 @@ class Source < ActiveRecord::Base
   end
 end
 
-class Survey < ActiveRecord::Base
+class Survey < ApplicationRecord
   has_many :listings
 end
 
-class Listing < ActiveRecord::Base
+class Listing < ApplicationRecord
   belongs_to :source
   belongs_to :survey
   validates :location, :title, :uid, presence: true

@@ -5,7 +5,7 @@ Rentscape is an open rental listing aggregator that schedules sampling crawls ac
 ## Install Steps
 
 1. Setup `database.yml`
-2. `rvm install 2.4.10`
+2. `rvm install 2.7.1`
 3. `gem install bundler`
 4. `bundle install`
 5. `bundle exec rake db:setup`
