@@ -1,5 +1,5 @@
 # config valid for current version and patch releases of Capistrano
-lock "~> 3.11.1"
+lock "~> 3.14.1"
 
 set :application, "rental-listing-aggregator"
 set :repo_url, "git@github.com:mapc/rental-listing-aggregator.git"
