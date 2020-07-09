@@ -15,7 +15,7 @@ module Craigslist
     begin
       res = Net::HTTP.get_response(uri)
     rescue StandardError => e
-      puts 'Could not connect to Craigslist. Aborting Craigslist scrape...'
+      STDERR.puts 'Could not connect to Craigslist. Aborting Craigslist scrape...'
       sleep(1)
       return
     end
@@ -56,8 +56,8 @@ module Craigslist
     begin
       res = Net::HTTP.get_response(uri)
     rescue StandardError => e
-      puts 'ERROR: ' + e.message.to_s
-      puts "Could not connect to Craiglist at #{geocluster_url}\n Aborting..."
+      STDERR.puts 'ERROR: ' + e.message.to_s
+      STDERR.puts "Could not connect to Craiglist at #{geocluster_url}\n Aborting..."
       sleep(1)
       return
     end
@@ -68,7 +68,7 @@ module Craigslist
       begin
         create_listing_from_result(r, survey) unless r.has_key?('GeoCluster')
       rescue StandardError => e
-        puts 'ERROR: ' + e.message.to_s
+        STDERR.puts 'ERROR: ' + e.message.to_s
       end
 
       fetch_nested(r.fetch('url'), survey) if r.has_key?('GeoCluster')
@@ -104,7 +104,11 @@ module Craigslist
     #end
 
     l.location = location
-    l.ask = r.fetch('Ask') { :default }
+    begin
+      l.ask = r.fetch('price')
+    rescue KeyError => e
+      STDERR.puts 'ERROR: ' + e.message.to_s
+    end
     l.bedrooms = r['Bedrooms']
     l.title = r['PostingTitle']
     l.posting_date = date

@@ -95,9 +95,8 @@ module Padmapper
         results = JSON.parse(crawl_slice(filters(box)))
         next unless assert_batch_has_unique(results) && results.count > 0
       rescue Exception => e
-        puts'ERROR: ' + e.message
-
-        puts 'Could not connect to Padmapper slice. Continuing...'
+        STDERR.puts'ERROR: ' + e.message
+        STDERR.puts 'Could not connect to Padmapper slice. Continuing...'
         next
       end
 
@@ -108,8 +107,8 @@ module Padmapper
         begin
           create_listing_from_result(result)
         rescue Exception => e
-          Raven.capture_exception(e)
-          puts 'Could not create listing record from Padmapper result. Continuing...'
+          STDERR.puts 'ould not create listing record from Padmapper result. Continuing...'
+          STDERR.puts 'ERROR: ' + e.message.to_s
         end
       end
 
@@ -141,7 +140,7 @@ module Padmapper
       @new_results += 1
       print 'New Padmapper result ' + @results_count.to_s + ': ' + l.title + "\n" if ENV['RACK_ENV'] == 'development'
     else
-      print 'FAILURE on Padmapper ' + @results_count.to_s + ': ' + l.title + "\n"
+      STDERR.puts "FAILURE on Padmapper #{result['listing_id'].to_s}: #{result['address'].to_s}"
     end
   end
 
