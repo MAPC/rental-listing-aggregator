@@ -109,7 +109,11 @@ module Craigslist
     rescue KeyError => e
       STDERR.puts 'ERROR: ' + e.message.to_s
     end
-    l.bedrooms = r['Bedrooms']
+    begin
+      l.bedrooms = r.fetch('bedrooms')
+    rescue KeyError => e
+      STDERR.puts 'ERROR: ' + e.message.to_s
+    end
     l.title = r['PostingTitle']
     l.posting_date = date
     l.survey = survey
