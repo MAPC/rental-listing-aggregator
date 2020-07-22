@@ -82,6 +82,8 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.9.0)
     rspec-support (3.9.3)
+    sentry-raven (3.0.0)
+      faraday (>= 1.0)
     sinatra (1.4.8)
       rack (~> 1.5)
       rack-protection (~> 1.4)
@@ -117,6 +119,7 @@ DEPENDENCIES
   rake
   rgeo
   rspec
+  sentry-raven
   sinatra (= 1.4.8)
   sinatra-activerecord
 
