@@ -97,7 +97,6 @@ module Padmapper
       rescue Exception => e
         STDERR.puts'ERROR: ' + e.message
         STDERR.puts 'Could not connect to Padmapper slice. Continuing...'
-        Raven.capture_exception(e)
         next
       end
 
@@ -108,9 +107,8 @@ module Padmapper
         begin
           create_listing_from_result(result)
         rescue Exception => e
-          STDERR.puts 'Could not create listing record from Padmapper result. Continuing...'
+          STDERR.puts 'ould not create listing record from Padmapper result. Continuing...'
           STDERR.puts 'ERROR: ' + e.message.to_s
-          Raven.capture_exception(e)
         end
       end
 
@@ -143,7 +141,6 @@ module Padmapper
       print 'New Padmapper result ' + @results_count.to_s + ': ' + l.title + "\n" if ENV['RACK_ENV'] == 'development'
     else
       STDERR.puts "FAILURE on Padmapper #{result['listing_id'].to_s}: #{result['address'].to_s}"
-      Raven.capture_message("FAILURE on Padmapper #{result['listing_id'].to_s}: #{result['address'].to_s}")
     end
   end
 

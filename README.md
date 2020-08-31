@@ -38,7 +38,7 @@ container in `docker-compose.yml`
 To schedule a regular CRON job without Docker insert something like this in your crontab after typing `crontab -e`:
 `3 0 * * 3  cd /opt/rental-listing-aggregator/current && RACK_ENV=production /usr/share/rvm/wrappers/ruby-2.4.10/rake scraper:scrape 2>&1 | /usr/bin/logger -t rental_listing_scraper`
 
-You also need to make sure you have configured your system environment variables. Potentially in /etc/environment or ~/.pam_environment.
+You also need to make sure you have configured your system environment variables. Potentially in /etc/environment.
 
 ```
 CRAIGSLIST_URL='https://boston.craigslist.org'

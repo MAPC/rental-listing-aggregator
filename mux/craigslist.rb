@@ -16,7 +16,6 @@ module Craigslist
       res = Net::HTTP.get_response(uri)
     rescue StandardError => e
       STDERR.puts 'Could not connect to Craigslist. Aborting Craigslist scrape...'
-      Raven.capture_exception(e)
       sleep(1)
       return
     end
@@ -30,7 +29,6 @@ module Craigslist
         create_listing_from_result(r, survey) unless r.has_key?('GeoCluster')
       rescue StandardError => e
         puts 'ERROR: ' + e.message.to_s
-        Raven.capture_exception(e)
       end
 
       break if ENV['MAX_RESULTS'] && @results_count > ENV['MAX_RESULTS'].to_i
@@ -38,7 +36,6 @@ module Craigslist
     end
 
     print sprintf("Craigslist: %d results, %d new, %d changed\n", @results_count, @new_results, @changed_results)
-    Raven.capture_message("Craigslist: #{@results_count} results, #{@results_count} new, #{@changed_results} changed", { level: 'info' })
 
     conn = Faraday.new(:url => 'https://hooks.slack.com')
     conn.post do |req|
@@ -61,8 +58,6 @@ module Craigslist
     rescue StandardError => e
       STDERR.puts 'ERROR: ' + e.message.to_s
       STDERR.puts "Could not connect to Craiglist at #{geocluster_url}\n Aborting..."
-      Raven.capture_exception(e)
-      Raven.extra_context("Geocluster URL: #{geocluster_url}")
       sleep(1)
       return
     end
@@ -74,7 +69,6 @@ module Craigslist
         create_listing_from_result(r, survey) unless r.has_key?('GeoCluster')
       rescue StandardError => e
         STDERR.puts 'ERROR: ' + e.message.to_s
-        Raven.capture_exception(e)
       end
 
       fetch_nested(r.fetch('url'), survey) if r.has_key?('GeoCluster')
@@ -114,13 +108,11 @@ module Craigslist
       l.ask = r.fetch('price')
     rescue KeyError => e
       STDERR.puts 'ERROR: ' + e.message.to_s
-      Raven.capture_exception(e)
     end
     begin
       l.bedrooms = r.fetch('bedrooms')
     rescue KeyError => e
       STDERR.puts 'ERROR: ' + e.message.to_s
-      Raven.capture_exception(e)
     end
     l.title = r['PostingTitle']
     l.posting_date = date
