@@ -17,4 +17,5 @@ group :development do
   gem "capistrano", "~> 3.11", require: false
   gem "capistrano-rvm"
   gem 'capistrano-bundler', '~> 1.6'
+  gem 'pry-byebug'
 end

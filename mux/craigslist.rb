@@ -118,7 +118,7 @@ module Craigslist
     l.posting_date = date
     l.survey = survey
     l.source = @@source
-    l.payload = r.to_json
+    l.payload = r
     l.last_seen = DateTime.now
 
     @results_count += 1

@@ -7,10 +7,6 @@ default: &default
 
 development: &development
   <<: *default
-  database: rent_aggregator_db
-  username: root
-  host: db
+  database: rental_listing_aggregator
 
 production:
-  <<: *development
-  password: secret

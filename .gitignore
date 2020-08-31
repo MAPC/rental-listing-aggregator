@@ -32,3 +32,5 @@ docker-compose.yml
 recipients.json
 config/database.yml
 mail.json
+
+.env
