@@ -132,7 +132,7 @@ module Padmapper
     l.posting_date = date
     l.survey = @@current_survey
     l.source = @@source
-    l.payload = result.to_json
+    l.payload = result
     l.last_seen = DateTime.now
 
     @results_count += 1
