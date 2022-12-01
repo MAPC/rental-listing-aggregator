@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 gem 'pg'
-gem 'sinatra', '1.4.8'
+gem 'sinatra', '2.2.3'
 gem 'activerecord-postgis-adapter', '5.2.2'
 gem 'sinatra-activerecord'
 gem 'rake'
